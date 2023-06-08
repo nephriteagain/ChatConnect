@@ -1,5 +1,5 @@
 // REACT
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 
 // FIREBASE
 import { signInWithPopup, signOut } from 'firebase/auth'
@@ -7,6 +7,10 @@ import { setDoc, getDoc, doc } from 'firebase/firestore'
 
 // DB FILES
 import { auth, provider, db } from '../db/firebase'
+
+import UserModal from './UserModal'
+
+import { MdOutlineEdit} from 'react-icons/md'
 
 // TYPES
 import type { userDataType } from '../App'
@@ -17,7 +21,19 @@ interface UserProps {
 }
 
 export default function User({userData, setUserData}: UserProps) {
-  
+  const [userName, setUserName] = useState<string>('')
+  const [showModal, setShowModal ] = useState<boolean>(false)
+
+  async function getUserData() {
+    if (!userData) return
+    const userRef = doc(db, 'users', userData.uid)
+    const data = await getDoc(userRef)
+      .catch(err => {
+        throw new Error(err)
+      })
+    const userNameData = data.data()?.userName
+    userNameData && setUserName(userNameData)
+  }
 
 
   async function signInWithGoogle() {
@@ -56,6 +72,10 @@ async function userSignOut() {
     .catch(err => console.log(err))
 }
 
+  useEffect(() => {
+    getUserData()
+  }, [userData])
+
 
   const login = userData
     ? <button onClick={userSignOut}
@@ -73,11 +93,28 @@ async function userSignOut() {
 </button>
 
   return (
-    <div className='flex'>
-      <div className='ms-auto'>
-      {login}
+    <>
+    {showModal && 
+    <UserModal 
+      userName={userName}
+      setUserName={setUserName}
+      setShowModal={setShowModal}
+      userData={userData}
+    />}
+    <div className='flex mt-2 mx-2'>       
+      <div className='ms-auto flex items-center justify-center'>      
+      <div className='me-4'>
+        <button className='me-2 bg-myText text-mySecondary px-1 py-1 rounded-md hover:scale-105 active:scale-100 transition-all duration-100'
+          onClick={() => setShowModal(true)}
+        >
+          <MdOutlineEdit />
+        </button>
+        {userName}
+      </div>
+      {login}      
       </div>
       
     </div>
+    </>
   )
 }

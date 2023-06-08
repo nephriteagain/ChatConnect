@@ -1,4 +1,4 @@
-import { useEffect, useState } from  'react';
+import { useEffect, useState, KeyboardEvent } from  'react';
 
 import { onSnapshot, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
@@ -25,6 +25,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
   const [ text, setText ] = useState<string>('')
   const [ roomName, setRoomName ] = useState<string>('')
   const [ userName, setUserName ] = useState<string>('')
+  const [ forceScroll, setForceScroll ] = useState<boolean>(false)
 
   const userId = user?.uid || null
 
@@ -48,6 +49,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
     } else {
       textarea.style.height = '400px'
     }
+    
   }
 
   async function sendText(msgObj: message) {
@@ -73,6 +75,8 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
       const data = doc.data() as any
       setMessages(data.messages)
       setRoomName(data.name)
+      setForceScroll(true)
+      
     })
 
   }, [joinedRoomId])
@@ -81,16 +85,28 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
     getUserData()
   }, [user])
 
+  useEffect(() => {
+    if (!forceScroll) return
+    const chatElement = document.querySelector('.chat') as HTMLDivElement
+    chatElement.scrollTo({
+      top: chatElement.scrollHeight,
+      behavior: "smooth"
+    });
+    setForceScroll(false)
+  }, [forceScroll])
+
+
+
   return (
-    <div className='min-w-[300px] max-w-[500px] mx-auto overflow-hidden'>
+    <div className='min-w-[300px] max-w-[500px] mx-auto overflow-hidden mt-8'>
       <p className='text-center bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md'>
         {roomName}
       </p>
-      <div className='px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden'>
+      <div className='chat px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden transition-all duration-100'>
       
       {messages.map((message, index) => {
         return (
-          <div key={index} className='flex flex-col mb-2 mt-1'>
+          <div key={index} className='flex flex-col mb-3 mt-1'>
             <div className={message.userId === user?.uid ?
               'max-w-[80%] ms-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip' : 
               'max-w-[80%] me-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip'
@@ -99,8 +115,8 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
               {message.text}
             </div>
             <small className={message.userId === user?.uid ?
-              'opacity-65 ms-auto':
-              'opacity-65 me-auto'
+              'opacity-55 ms-auto':
+              'opacity-55 me-auto'
             }>
               {message?.userName}
             </small>
@@ -114,7 +130,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
         <textarea value={text}
           className='text-area text-myBackground px-2 py-1 outline-none w-[85%]'
           onChange={(e) => setText(e.currentTarget.value)}
-          onInput={autoAdjustHeight}                    
+          onInput={autoAdjustHeight}                                  
         />
         <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})}
           className='w-[15%] flex items-center justify-center text-2xl bg-myAccent'
