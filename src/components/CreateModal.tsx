@@ -47,36 +47,47 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
 
   return (
     <div className='fixed top-0 left-0 w-full h-full bg-[transparent] flex items-center justify-center'>
-      <div className='mb-[10%]'>
-        <div>
-          <label>Room Name</label>
+      <div className='fixed top-0 left-0 w-full h-full bg-black opacity-70'></div>
+      <div className='mb-[10%] z-10 bg-mySecondary p-8 rounded-md w-[500px] min-w-[300px] flex flex-col items-center justify-center'>
+        <div className='flex flex-col items-center justify-center mb-4  '>
+          <label className='text-lg font-semibold'>Room Name</label>
           <input 
             onChange={(e) => changeName(e)}
-            className='px-2 text-mySecondary'
+            className='px-2 py-1 text-mySecondary outline-none rounded-md'
             type='text' 
             placeholder='enter room name...'
             value={roomData.name}
+            maxLength={20}
           />
         </div>
-        <div>
+        <div className='bg-myAccent px-4 py-2 rounded-md'>
+          <p className='text-lg font-semibold text-center'>
+            TYPE
+          </p>
           <button ref={publicRef}
             onClick={(e) => setType(e)}
             style={{border: '2px solid #fff'}}
+            className='px-2 py-1 mt-1 bg-myBackground mx-1 rounded-md'
           >
             Public
           </button>
           <button ref={privateRef}
             onClick={(e) => setType(e)}
+            className='px-2 py-1 mt-1 bg-myBackground mx-1 rounded-md'
           >
             Private
           </button>
         </div>
 
-        <div>
-          <button onClick={() => handleCreate(roomData)}>
-            Create New Room
+        <div className='bg-myPrimary text-mySecondary font-bold flex w-[280px] px-4 py-2 rounded-md my-4'>
+          <button onClick={() => handleCreate(roomData)}
+          className='basis-1/2 bg-green-300 rounded-md mx-1 px-2 py-1'
+          >
+            Create Room
           </button>
-          <button onClick={() => handleModal(false)}>
+          <button onClick={() => handleModal(false)}
+          className='basis-1/2 bg-red-300 rounded-md mx-1 px-2 py-1'
+          >
             Cancel
           </button>
         </div>

@@ -36,7 +36,6 @@ export default function User({userData, setUserData}: UserProps) {
                 userName: userObject.email,
                 id: uid,
                 joinedAt: Date.now(),
-                joinedRooms: []
               })
                 .catch(err => {
                   throw new Error(err)
@@ -74,8 +73,8 @@ async function userSignOut() {
 </button>
 
   return (
-    <div>
-      <div>
+    <div className='flex'>
+      <div className='ms-auto'>
       {login}
       </div>
       

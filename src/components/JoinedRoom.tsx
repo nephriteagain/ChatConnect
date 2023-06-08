@@ -1,13 +1,15 @@
 import { useEffect, useState } from  'react';
 
-import { onSnapshot, doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db,} from '../db/firebase';
+import { onSnapshot, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
+import { auth, db,} from '../db/firebase';
 
 import { generateRandomString } from '../lib/generateId';
 
+import { BsFillSendFill } from 'react-icons/bs'
+
 type JoinedRoomProps = {
   joinedRoomId : null|string
-  userId: string
+  user: any //TODO
 }
 // TODO
 type message = {
@@ -15,11 +17,28 @@ type message = {
   userId: string
   text: string,
   postedAt: number,
+  userName: string
 }
 
-export default function JoinedRoom({joinedRoomId, userId}: JoinedRoomProps) {
+export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
   const [ messages, setMessages ] = useState<message[]>([])
   const [ text, setText ] = useState<string>('')
+  const [ roomName, setRoomName ] = useState<string>('')
+  const [ userName, setUserName ] = useState<string>('')
+
+  const userId = user?.uid || null
+
+  async function getUserData() {
+    if (!user) return
+    const userRef = doc(db, 'users', userId)
+    const data = await getDoc(userRef)
+      .catch(err => {
+        throw new Error(err)
+      })
+    const userName = data.data()?.userName
+    setUserName(userName)
+  }
+
 
   function autoAdjustHeight() {
     const textarea = document.querySelector('.text-area') as HTMLTextAreaElement
@@ -32,7 +51,7 @@ export default function JoinedRoom({joinedRoomId, userId}: JoinedRoomProps) {
   }
 
   async function sendText(msgObj: message) {
-    if (joinedRoomId === null) return
+    if (joinedRoomId === null || text.length === 0) return
     const roomRef = doc(db, 'rooms', joinedRoomId)
 
     await updateDoc(roomRef, {
@@ -53,32 +72,58 @@ export default function JoinedRoom({joinedRoomId, userId}: JoinedRoomProps) {
     onSnapshot(joinedRoomRef, (doc) => {
       const data = doc.data() as any
       setMessages(data.messages)
+      setRoomName(data.name)
     })
 
   }, [joinedRoomId])
 
+  useEffect(() => {
+    getUserData()
+  }, [user])
+
   return (
-    <div>
-      <div>
+    <div className='min-w-[300px] max-w-[500px] mx-auto overflow-hidden'>
+      <p className='text-center bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md'>
+        {roomName}
+      </p>
+      <div className='px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden'>
+      
       {messages.map((message, index) => {
         return (
-          <div key={index}>
-            {message.text}
+          <div key={index} className='flex flex-col mb-2 mt-1'>
+            <div className={message.userId === user?.uid ?
+              'max-w-[80%] ms-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip' : 
+              'max-w-[80%] me-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip'
+            }
+            >
+              {message.text}
+            </div>
+            <small className={message.userId === user?.uid ?
+              'opacity-65 ms-auto':
+              'opacity-65 me-auto'
+            }>
+              {message?.userName}
+            </small>
           </div>
         )
       })}
       </div>
 
-      <div>
+      { user && joinedRoomId &&
+        <div className='mt-1 flex rounded-md overflow-hidden'>
         <textarea value={text}
-          className='text-area text-myBackground px-2 py-1 outline-none w-[70%] max-w-[300px]'
+          className='text-area text-myBackground px-2 py-1 outline-none w-[85%]'
           onChange={(e) => setText(e.currentTarget.value)}
           onInput={autoAdjustHeight}                    
         />
+        <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})}
+          className='w-[15%] flex items-center justify-center text-2xl bg-myAccent'
+        >
+          <BsFillSendFill />
+        </button>
       </div>
-      <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now()})}>
-        Send
-      </button>
+      }
+     
     </div>
   )
 }

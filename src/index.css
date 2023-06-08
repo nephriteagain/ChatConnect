@@ -14,6 +14,21 @@
     resize: none;
   }
 
+  /* For WebKit browsers (e.g., Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 6px; /* Adjust the width as desired */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4a5568; /* Customize the scrollbar thumb color */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin; /* Adjust the width as desired */
+  scrollbar-color: #4a5568 transparent; /* Customize the scrollbar thumb color */
+}
+
 
   @media (min-width: 576px) {
     html {
