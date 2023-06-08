@@ -16,6 +16,10 @@ export default function Create() {
   async function createNewRoom({name, type}: newRoom) {
     if (auth.currentUser === null) return
     if (!name || !type) return
+    if (name === 'PUBLIC') {
+      alert('cannot name a Room as "PUBLIC"')
+    }
+ 
 
     const roomsRef = collection(db, 'rooms')
     const data = type === 'public'
@@ -32,7 +36,8 @@ export default function Create() {
         messages: [],
         name,
         type,
-        members: [auth.currentUser.uid]
+        members: [auth.currentUser.uid],
+        requests: []
       }
     await addDoc(roomsRef, data)
       .then(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState, KeyboardEvent } from  'react';
+import { useEffect, useState, } from  'react';
 
 import { onSnapshot, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
@@ -7,12 +7,16 @@ import { generateRandomString } from '../lib/generateId';
 
 import { BsFillSendFill } from 'react-icons/bs'
 
+import RoomNav from './RoomNav';
+import Messages from './Messages';
+import Requests from './Requests';
+
 type JoinedRoomProps = {
   joinedRoomId : null|string
   user: any //TODO
 }
 // TODO
-type message = {
+export type message = {
   id: string,
   userId: string
   text: string,
@@ -20,12 +24,24 @@ type message = {
   userName: string
 }
 
+//TODO
+export type requestType = {
+  id: string
+  email: string
+  userName: string
+}
+
 export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
   const [ messages, setMessages ] = useState<message[]>([])
+  const [ requests, setRequests ] = useState<requestType[]>([])
   const [ text, setText ] = useState<string>('')
   const [ roomName, setRoomName ] = useState<string>('')
   const [ userName, setUserName ] = useState<string>('')
   const [ forceScroll, setForceScroll ] = useState<boolean>(false)
+  const [ interfaceSelected, setInterfaceSelected ] = useState<string>('messages')
+  const [ roomType, setRoomType ] = useState<string>('public')
+  const [ isAdmin, setIsAdmin ] = useState<boolean>(false)
+  const [ isMod, setIsMod ] = useState<boolean>(false)
 
   const userId = user?.uid || null
 
@@ -69,20 +85,40 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
   }
 
   useEffect(() => {
-    if (joinedRoomId === null) return
-    const joinedRoomRef = doc(db, 'rooms', joinedRoomId)
-    onSnapshot(joinedRoomRef, (doc) => {
-      const data = doc.data() as any
-      setMessages(data.messages)
-      setRoomName(data.name)
-      setForceScroll(true)
-      
-    })
+    let unSub = () => console.log('')
 
+    if (joinedRoomId !== null) {
+      const joinedRoomRef = doc(db, 'rooms', joinedRoomId)
+       unSub = onSnapshot(joinedRoomRef, (doc) => {
+      const data = doc.data() as any
+      if (data) {
+        console.log(data, 'data')
+        setMessages(data.messages)
+        setRoomName(data.name)
+        setForceScroll(true)
+        setRoomType(data.type)
+        if (data.type === 'private') {
+          setRequests(data.requests)
+          //TODO refactor this
+          data.admin === auth?.currentUser?.uid && setIsAdmin(true)
+          data.mods.some((user: string) => user === auth?.currentUser?.uid) && setIsMod(true)
+        }
+      }            
+    })
+    }
+    
+    return () => unSub()
   }, [joinedRoomId])
+
+
+  // useEffect(() => {
+  //   console.log(requests, 'requests')
+  // }, [requests])
+
 
   useEffect(() => {
     getUserData()
+    
   }, [user])
 
   useEffect(() => {
@@ -98,31 +134,14 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
 
 
   return (
-    <div className='min-w-[300px] max-w-[500px] mx-auto overflow-hidden mt-8'>
+    <div className='min-w-[280px] max-w-[500px] mx-auto overflow-hidden mt-8'>
       <p className='text-center bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md'>
         {roomName}
       </p>
+      { roomType === 'private' && <RoomNav interfaceSelected={interfaceSelected} setInterfaceSelected={setInterfaceSelected} />}
       <div className='chat px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden transition-all duration-100'>
-      
-      {messages.map((message, index) => {
-        return (
-          <div key={index} className='flex flex-col mb-3 mt-1'>
-            <div className={message.userId === user?.uid ?
-              'max-w-[80%] ms-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip' : 
-              'max-w-[80%] me-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip'
-            }
-            >
-              {message.text}
-            </div>
-            <small className={message.userId === user?.uid ?
-              'opacity-55 ms-auto':
-              'opacity-55 me-auto'
-            }>
-              {message?.userName}
-            </small>
-          </div>
-        )
-      })}
+        { interfaceSelected === 'messages' && <Messages messages={messages} user={user}/>}
+        { interfaceSelected === 'requests' && <Requests requests={requests} isAdmin={isAdmin} isMod={isMod} joinedRoomId={joinedRoomId}/> }
       </div>
 
       { user && joinedRoomId &&
@@ -133,7 +152,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
           onInput={autoAdjustHeight}                                  
         />
         <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})}
-          className='w-[15%] flex items-center justify-center text-2xl bg-myAccent'
+          className='w-[15%] flex items-center justify-center text-2xl bg-myAccent active:bg-myPrimary transition-all duration-100'
         >
           <BsFillSendFill />
         </button>

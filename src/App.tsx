@@ -47,7 +47,7 @@ function App() {
 
   return (
     <>
-      <User userData={userData} setUserData={setUserData}/>
+      <User userData={userData} setUserData={setUserData} setJoinedRoomId={setJoinedRoomId}/>
       <div className='absolute bg-mySecondary h-full top-0 left-0 pt-12 px-4 transition-all duration-200 z-[3]'
         ref={sideBarRef}
       >
@@ -57,7 +57,7 @@ function App() {
           <IoMdCloseCircle/>
         </button>
         {auth.currentUser && <Create/>}
-        <Rooms setJoinedRoomId={setJoinedRoomId}/>
+        <Rooms setJoinedRoomId={setJoinedRoomId} setShowRooms={setShowRooms} />
       </div>
       { joinedRoomId && <JoinedRoom joinedRoomId={joinedRoomId} user={userData}/>}
       <button className='absolute z-[2] text-2xl top-2 left-2'

@@ -18,9 +18,10 @@ import type { userDataType } from '../App'
 interface UserProps {
   userData: userDataType
   setUserData: Dispatch<SetStateAction<userDataType>>
+  setJoinedRoomId: Dispatch<SetStateAction<string|null>>
 }
 
-export default function User({userData, setUserData}: UserProps) {
+export default function User({userData, setUserData, setJoinedRoomId}: UserProps) {
   const [userName, setUserName] = useState<string>('')
   const [showModal, setShowModal ] = useState<boolean>(false)
 
@@ -68,7 +69,11 @@ export default function User({userData, setUserData}: UserProps) {
 
 async function userSignOut() {
   await signOut(auth)
-    .then(() => setUserData(null))
+    .then(() => {
+      setUserData(null)
+      setUserName('')
+      setJoinedRoomId(null)
+    })
     .catch(err => console.log(err))
 }
 
@@ -104,11 +109,11 @@ async function userSignOut() {
     <div className='flex mt-2 mx-2'>       
       <div className='ms-auto flex items-center justify-center'>      
       <div className='me-4'>
-        <button className='me-2 bg-myText text-mySecondary px-1 py-1 rounded-md hover:scale-105 active:scale-100 transition-all duration-100'
+        { userData && <button className='me-2 bg-myText text-mySecondary px-1 py-1 rounded-md hover:scale-105 active:scale-100 transition-all duration-100'
           onClick={() => setShowModal(true)}
         >
           <MdOutlineEdit />
-        </button>
+        </button>}
         {userName}
       </div>
       {login}      

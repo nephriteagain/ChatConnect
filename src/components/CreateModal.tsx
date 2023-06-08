@@ -46,9 +46,9 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
 
 
   return (
-    <div className='fixed top-0 left-0 w-full h-full bg-[transparent] flex items-center justify-center'>
-      <div className='fixed top-0 left-0 w-full h-full bg-black opacity-70'></div>
-      <div className='mb-[10%] z-10 bg-mySecondary p-8 rounded-md w-[500px] min-w-[300px] flex flex-col items-center justify-center'>
+    <div className='fixed top-0 left-0 w-[100vw] h-[100vh] bg-[transparent] flex items-center justify-center'>
+      <div className='fixed top-0 left-0 w-[100vw] h-[100vh] bg-black opacity-60 z-[100]'></div>
+      <div className='mb-[10%] z-[101] bg-mySecondary p-8 rounded-md w-[450px] min-w-[300px] flex flex-col items-center justify-center'>
         <div className='flex flex-col items-center justify-center mb-4  '>
           <label className='text-lg font-semibold'>Room Name</label>
           <input 
