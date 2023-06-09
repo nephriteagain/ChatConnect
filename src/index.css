@@ -16,7 +16,7 @@
 
   /* For WebKit browsers (e.g., Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 6px; /* Adjust the width as desired */
+  width: 6px; /* Adjust the width as desired */  
 }
 
 ::-webkit-scrollbar-thumb {
@@ -28,6 +28,15 @@
   scrollbar-width: thin; /* Adjust the width as desired */
   scrollbar-color: #4a5568 transparent; /* Customize the scrollbar thumb color */
 }
+
+.popup-show {
+  transform: translateX(0%);
+}
+
+.popup-hide {
+  transform: translateX(-150%) !important;
+}
+
 
 
   @media (min-width: 576px) {

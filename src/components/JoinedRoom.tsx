@@ -42,6 +42,9 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
   const [ roomType, setRoomType ] = useState<string>('public')
   const [ isAdmin, setIsAdmin ] = useState<boolean>(false)
   const [ isMod, setIsMod ] = useState<boolean>(false)
+  const [ modList, setModList ] = useState<string[]>([])
+
+
 
   const userId = user?.uid || null
 
@@ -97,11 +100,12 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
         setRoomName(data.name)
         setForceScroll(true)
         setRoomType(data.type)
+        setModList(data.mods)        
+        data.admin === auth?.currentUser?.uid && setIsAdmin(true)
+        data.mods.some((user: string) => user === auth?.currentUser?.uid) && setIsMod(true)
         if (data.type === 'private') {
           setRequests(data.requests)
           //TODO refactor this
-          data.admin === auth?.currentUser?.uid && setIsAdmin(true)
-          data.mods.some((user: string) => user === auth?.currentUser?.uid) && setIsMod(true)
         }
       }            
     })
@@ -140,8 +144,22 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
       </p>
       { roomType === 'private' && <RoomNav interfaceSelected={interfaceSelected} setInterfaceSelected={setInterfaceSelected} />}
       <div className='chat px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden transition-all duration-100'>
-        { interfaceSelected === 'messages' && <Messages messages={messages} user={user}/>}
-        { interfaceSelected === 'requests' && <Requests requests={requests} isAdmin={isAdmin} isMod={isMod} joinedRoomId={joinedRoomId}/> }
+        { interfaceSelected === 'messages' && 
+          <Messages 
+            messages={messages} 
+            user={user}
+            isAdmin={isAdmin}
+            modList={modList}
+            joinedRoomId={joinedRoomId}
+        />}
+
+        { interfaceSelected === 'requests' && 
+          <Requests 
+            requests={requests} 
+            isAdmin={isAdmin} 
+            isMod={isMod} 
+            joinedRoomId={joinedRoomId}
+          /> }
       </div>
 
       { user && joinedRoomId &&
