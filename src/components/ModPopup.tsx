@@ -16,8 +16,6 @@ export default function ModPopup({promoteUserToMod, joinedRoomId, userId, index,
     e.stopPropagation()
 
     const el = document.querySelector(`.popup-${index}`) as HTMLDivElement
-    console.log(index)
-    console.log(el)
     if (el) {
       el.classList.remove('popup-show')
       el.classList.add('popup-hide')
@@ -27,7 +25,7 @@ export default function ModPopup({promoteUserToMod, joinedRoomId, userId, index,
   }
 
   return (
-    <div className={`popup-${index} popup-hide bg-mySecondary text-myText px-1 py-[1px] rounded-md w-fit flex items-center justify-center text-md absolute top-100 left-0 overflow-hidden z-[9]`}    
+    <div className={`popup-${index} popup-hide bg-mySecondary text-myText px-1 py-[1px] rounded-md w-fit flex items-center justify-center text-md absolute top-100 left-0 overflow-hidden z-[9] transition-all duration-100`}    
     >
       <span>
         mod user?

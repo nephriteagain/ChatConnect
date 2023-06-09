@@ -149,6 +149,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
             messages={messages} 
             user={user}
             isAdmin={isAdmin}
+            isMod={isMod}
             modList={modList}
             joinedRoomId={joinedRoomId}
         />}
