@@ -4,6 +4,10 @@ import {doc, getDoc} from 'firebase/firestore'
 
 import { db } from '../db/firebase'
 
+import { IoMdSettings } from 'react-icons/io'
+
+import SettingsPopup from './SettingsPopup'
+
 interface AdminModalType {
   joinedRoomId: string|null
   setShowAdminModal: Dispatch<SetStateAction<boolean>>
@@ -11,7 +15,7 @@ interface AdminModalType {
   isMod: boolean
 }
 
-interface userType {
+export interface userType {
   email: string
   id: string
   joinedAt: number
@@ -28,6 +32,26 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
     setShowAdminModal(false)
   }
 
+  function openCloseSettings(e: MouseEvent<HTMLButtonElement>, id: string) {
+    e.stopPropagation()
+
+    if (typeof id !== 'string') return
+    const element = document.querySelector(`.settings-${id}`) as HTMLButtonElement
+
+    if (element) {      
+      const styles = window.getComputedStyle(element)
+      if (styles.visibility === 'hidden') {
+        element.style.visibility = 'visible'
+        element.style.opacity = '1'
+      } else {
+        element.style.visibility = 'hidden'
+        element.style.opacity = '0'
+      }
+
+    }       
+  }
+
+
   useEffect(() => {
     if (!joinedRoomId) return
     const modDataArr : userType[] = []
@@ -38,7 +62,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
         if (document?.data()) {
           const admin : string = document?.data()?.admin
           const modsArr : string[] = document?.data()?.mods
-          console.log(modsArr, 'modsArr from getDoc')
+
           if (admin) {
             const adminRef = doc(db, 'users', admin)
             getDoc(adminRef)
@@ -69,9 +93,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
       })
   }, [joinedRoomId])
 
-  useEffect(() => {
-    console.log(modsData, 'modsData')
-  }, [modsData])
+
 
   return (
     <div className="fixed top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center z-[500]">
@@ -95,7 +117,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
           {modsData.map(mod => {            
             return (
               <div key={mod.id}
-                className='flex flex-col items-center justify-center bg-myPrimary text-myBackground font-semibold px-4 py-1 rounded-md my-2 shadow-md drop-shadow-md'
+                className='flex flex-col items-center justify-center bg-myPrimary text-myBackground font-semibold px-4 py-1 rounded-md my-2 shadow-md drop-shadow-md relative'
               >                
                 <div className='text-lg'>
                   {mod?.userName}
@@ -109,6 +131,16 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
                     <div className='text-sm'>
                       {mod?.email}
                     </div>
+                  </>
+                }
+                { isAdmin && 
+                <>
+                  <button className='absolute top-1 right-1 text-xl z-10 hover:scale-110 hover:rotate-[90deg] active:scale-100 transition-all duration-100'
+                    onClick={(e) => openCloseSettings(e, mod.id)}
+                  >
+                    <IoMdSettings />
+                  </button>
+                  <SettingsPopup id={mod.id} joinedRoomId={joinedRoomId} setModsData={setModsData}/>
                   </>
                 }
               </div>

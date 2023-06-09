@@ -60,7 +60,7 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
     if (popupElement) {
       popupElement.classList.remove('popup-hide')
       popupElement.classList.add('popup-show')
-      console.log(popupElement.classList)
+
     }
   }
 

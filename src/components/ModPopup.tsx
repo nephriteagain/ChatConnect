@@ -19,7 +19,7 @@ export default function ModPopup({promoteUserToMod, joinedRoomId, userId, index,
     if (el) {
       el.classList.remove('popup-show')
       el.classList.add('popup-hide')
-      console.log(el.classList)
+
     }
   
   }

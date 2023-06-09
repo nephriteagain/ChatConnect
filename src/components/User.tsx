@@ -74,7 +74,9 @@ async function userSignOut() {
       setUserName('')
       setJoinedRoomId(null)
     })
-    .catch(err => console.log(err))
+    .catch(err => {
+      throw new Error(err)
+    })
 }
 
   useEffect(() => {

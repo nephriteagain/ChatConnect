@@ -97,7 +97,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
        unSub = onSnapshot(joinedRoomRef, (doc) => {
       const data = doc.data() as any
       if (data) {
-        console.log(data, 'data')
+   
         setMessages(data.messages)
         setRoomName(data.name)
         setForceScroll(true)
