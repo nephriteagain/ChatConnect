@@ -24,6 +24,8 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
 
 
   async function promoteUserToMod(e: MouseEvent<HTMLButtonElement>, userId: string, roomId: string,) {
+    
+    e.preventDefault()
     if (typeof roomId !== 'string') return
     const roomRef = doc(db, 'rooms', roomId)
 

@@ -6,10 +6,12 @@ import { auth, db,} from '../db/firebase';
 import { generateRandomString } from '../lib/generateId';
 
 import { BsFillSendFill } from 'react-icons/bs'
+import { MdPeopleAlt } from 'react-icons/md'
 
 import RoomNav from './RoomNav';
 import Messages from './Messages';
 import Requests from './Requests';
+import AdminModal from './AdminModal';
 
 type JoinedRoomProps = {
   joinedRoomId : null|string
@@ -43,7 +45,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
   const [ isAdmin, setIsAdmin ] = useState<boolean>(false)
   const [ isMod, setIsMod ] = useState<boolean>(false)
   const [ modList, setModList ] = useState<string[]>([])
-
+  const [ showAdminModal, setShowAdminModal ] = useState<boolean>(false)
 
 
   const userId = user?.uid || null
@@ -139,9 +141,21 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
 
   return (
     <div className='min-w-[280px] max-w-[500px] mx-auto overflow-hidden mt-8'>
-      <p className='text-center bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md'>
-        {roomName}
-      </p>
+      {showAdminModal && 
+      <AdminModal 
+        setShowAdminModal={setShowAdminModal}
+        joinedRoomId={joinedRoomId}
+        isAdmin={isAdmin}
+        isMod={isMod}
+      />}
+      <div className='bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md relative'>
+        <p className='text-center'>
+          {roomName}
+        </p>
+        <MdPeopleAlt className="absolute top-[50%] right-[3%] translate-y-[-50%]"
+          onClick={() => setShowAdminModal(true)}
+        />
+      </div>
       { roomType === 'private' && <RoomNav interfaceSelected={interfaceSelected} setInterfaceSelected={setInterfaceSelected} />}
       <div className='chat px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden transition-all duration-100'>
         { interfaceSelected === 'messages' && 

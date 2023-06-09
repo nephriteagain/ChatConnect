@@ -17,6 +17,7 @@ export type userDataType = any
 
 function App() {
   //TODO mods promotion:DONE, admin passing to mods, admin/mods removing chats, banning users, censoring words, custom censor words for users
+  //TODO ADMIN Modal
 
   const [userData, setUserData] = useState<userDataType>(null)
   const [joinedRoomId, setJoinedRoomId] = useState<string|null>(null)
