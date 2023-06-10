@@ -108,7 +108,13 @@ function App() {
         </span>
         </header>
 
-      { joinedRoomId && <JoinedRoom joinedRoomId={joinedRoomId} setJoinedRoomId={setJoinedRoomId} user={userData}/>}
+      { joinedRoomId && 
+        <JoinedRoom 
+          joinedRoomId={joinedRoomId} 
+          setJoinedRoomId={setJoinedRoomId} 
+          user={userData}
+          userName={userName}
+      />}
       <button className='absolute z-[2] text-2xl top-2 left-2'
         onClick={() => setShowRooms(true)}
       >

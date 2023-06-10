@@ -7,6 +7,7 @@ import ModPopup from "./ModPopup"
 import DeleteTextPopup from './DeleteTextPopup'
 import BanUserPopup from './BanUserPopup'
 
+import { filterPhrase } from '../lib/data'
 
 import type { message } from "./JoinedRoom"
 
@@ -112,6 +113,9 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
       const isUserPost = user?.uid === message?.userId    
       const isUserAdmin = message.userId === adminId
       
+      const filteredText = filterPhrase(message.text)
+      const filterName = filterPhrase(message.userName)
+
     return (
     <div key={index} className='flex flex-col mb-3 mt-1 relative'>
       {
@@ -137,7 +141,7 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
         message={message}
         roomId={joinedRoomId}
       />}
-      {message.text}
+      {filteredText}
       </div> :
       <div 
       className={isUserPost ?
@@ -145,7 +149,7 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
         'max-w-[80%] me-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip'
       }
       >
-      {message.text}
+      {filteredText}
       </div>
       }
       
@@ -160,7 +164,7 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
         onMouseEnter={(e) => showBanPopupElement(e, message.id)}                
         onMouseLeave={(e) => hideBanPopupElement(e, message.id, isUserPost)}
       >
-        {message?.userName}        
+        {filterName}        
           <ModPopup 
           promoteUserToMod={promoteUserToMod} 
           userId={message?.userId}
@@ -187,7 +191,7 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
         onMouseLeave={(e) => hideBanPopupElement(e, message.id, isUserPost)}
       >
         
-        {message?.userName}  
+        {filterName}  
         <BanUserPopup 
             position={isUserPost? 'right': 'left'} 
             messageId={message.id}
@@ -200,7 +204,7 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
         'opacity-55 me-auto relative'
       }                  
       >
-        {message?.userName}
+        {filterName}
         
       </small>
       }

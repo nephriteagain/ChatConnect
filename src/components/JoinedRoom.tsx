@@ -47,15 +47,15 @@ type JoinedRoomProps = {
   joinedRoomId : null|string
   setJoinedRoomId: Dispatch<SetStateAction<null|string>>
   user: any //TODO
+  userName: string
 }
 
 
-export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId}: JoinedRoomProps) {
+export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId, userName}: JoinedRoomProps) {
   const [ messages, setMessages ] = useState<message[]>([])
   const [ requests, setRequests ] = useState<requestType[]>([])
   const [ text, setText ] = useState<string>('')
   const [ roomName, setRoomName ] = useState<string>('')
-  const [ userName, setUserName ] = useState<string>('')
   const [ forceScroll, setForceScroll ] = useState<boolean>(false)
   const [ interfaceSelected, setInterfaceSelected ] = useState<string>('messages')
   const [ roomType, setRoomType ] = useState<string>('public')
@@ -69,17 +69,6 @@ export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId}: Joined
 
   const userId = user?.uid || null
  
-
-  async function getUserData() {
-    if (!user) return
-    const userRef = doc(db, 'users', userId)
-    const data = await getDoc(userRef)
-      .catch(err => {
-        throw new Error(err)
-      })
-    const userName = data.data()?.userName
-    setUserName(userName)
-  }
 
 
   function autoAdjustHeight() {
@@ -142,10 +131,6 @@ export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId}: Joined
 
 
 
-  useEffect(() => {
-    getUserData()
-    
-  }, [user])
 
   useEffect(() => {
     if (!forceScroll) return
