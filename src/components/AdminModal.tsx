@@ -102,7 +102,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
     const roomRef = doc(db, 'rooms', joinedRoomId)
     getDoc(roomRef)
       .then(document => {
-        if (document?.data()) {
+        if (document?.exists()) {
           const admin : string = document?.data()?.admin
           const modsArr : string[] = document?.data()?.mods
 
@@ -110,7 +110,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
             const adminRef = doc(db, 'users', admin)
             getDoc(adminRef)
               .then((doc) => {
-                if (doc?.data()) {
+                if (doc?.exists()) {
                   const data = doc.data() as userType
                   setAdminData(data)
                 }
@@ -121,7 +121,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
               const modRef = doc(db, 'users', mod)
               getDoc(modRef)
                 .then((document) => {
-                  if (document?.data()) {
+                  if (document?.exists()) {
                     const data = document.data() as userType
                     modDataArr.push(data)
                   }

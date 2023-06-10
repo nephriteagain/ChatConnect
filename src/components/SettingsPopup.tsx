@@ -71,7 +71,7 @@ export default function SettingsPopup({id, joinedRoomId, setModsData, setAdminDa
 
         await getDoc(roomRef)
           .then((document) => {
-            if (document?.data()) {
+            if (document?.exists()) {
               const modsArr = document?.data()?.mods as string[]
               if (modsArr.length === 0) {
                 setModsData([])
@@ -81,7 +81,7 @@ export default function SettingsPopup({id, joinedRoomId, setModsData, setAdminDa
 
                   getDoc(modRef)
                     .then(data => {
-                      if (data?.data()) {
+                      if (data?.exists()) {
                         const modData = data.data() as userType
                         modDataArr.push(modData)
                       }
@@ -122,7 +122,7 @@ export default function SettingsPopup({id, joinedRoomId, setModsData, setAdminDa
       .then(async () => {
         await getDoc(roomRef)
           .then(document => {
-            if (document?.data()) {
+            if (document?.exists()) {
               // fetch new mods arr
               const modsArr = document.data()?.mods as string[]              
               if (modsArr.length === 0) {
@@ -133,7 +133,7 @@ export default function SettingsPopup({id, joinedRoomId, setModsData, setAdminDa
 
                   getDoc(modRef)
                     .then(data => {
-                      if (data?.data()) {
+                      if (data?.exists()) {
                         const modData = data.data() as userType
                         modDataArr.push(modData)
                       }
@@ -147,7 +147,7 @@ export default function SettingsPopup({id, joinedRoomId, setModsData, setAdminDa
               const adminRef = doc(db, 'users', newAdminId)
               getDoc(adminRef)
                 .then(data => {
-                  if (data.data()) {
+                  if (data?.exists()) {
                     newAdmin = data.data() as userType
                   }
                 })

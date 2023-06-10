@@ -98,8 +98,8 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
     if (joinedRoomId !== null) {
       const joinedRoomRef = doc(db, 'rooms', joinedRoomId)
        unSub = onSnapshot(joinedRoomRef, (doc) => {
-      const data = doc.data() as any
-      if (data) {
+      const data = doc?.data() as any
+      if (doc.exists()) {
    
         setMessages(data.messages)
         setRoomName(data.name)
