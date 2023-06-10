@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
-import { auth, } from './db/firebase'
+import { auth, db} from './db/firebase'
 import { onAuthStateChanged, } from 'firebase/auth'
+import { doc, getDoc } from 'firebase/firestore'
 
 import User from './components/User'
 import Create from './components/Create'
@@ -53,8 +54,27 @@ function App() {
   }, [showRooms])
 
   useEffect(() => {
-    if (joinedRoomId === null) {
-      setJoinedRoomId(DEFAULT_ROOM)
+    if (joinedRoomId === null) {      
+      // not logged in, will auto join public at first
+      if (!auth?.currentUser?.uid) {
+        setJoinedRoomId(DEFAULT_ROOM)
+      } else {
+        // logged in, will check if banned, if not will join public
+        const publicRoomRef = doc(db, 'rooms', DEFAULT_ROOM)
+        getDoc(publicRoomRef)
+          .then(doc => {
+            if (doc.exists()) {
+              const roomData = doc.data()
+              const isBanned = roomData.banned.some((user: string) => user === auth?.currentUser?.uid)
+              if (!isBanned) {
+                setJoinedRoomId(DEFAULT_ROOM)
+              }
+            }
+          })
+          .catch(err => {
+            throw new Error(err)
+          })
+      }
     }
   }, [joinedRoomId])
 
@@ -88,7 +108,7 @@ function App() {
         </span>
         </header>
 
-      { joinedRoomId && <JoinedRoom joinedRoomId={joinedRoomId} user={userData}/>}
+      { joinedRoomId && <JoinedRoom joinedRoomId={joinedRoomId} setJoinedRoomId={setJoinedRoomId} user={userData}/>}
       <button className='absolute z-[2] text-2xl top-2 left-2'
         onClick={() => setShowRooms(true)}
       >

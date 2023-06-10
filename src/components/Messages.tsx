@@ -5,6 +5,7 @@ import { updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 import ModPopup from "./ModPopup"
 import DeleteTextPopup from './DeleteTextPopup'
+import BanUserPopup from './BanUserPopup'
 
 
 import type { message } from "./JoinedRoom"
@@ -16,21 +17,36 @@ interface MessagesProps {
   modList: string[]
   joinedRoomId: string|null
   isMod: boolean
+  adminId: string
 }
 
 type callback = (e: MouseEvent<HTMLButtonElement>) => void
 
+// need for clearInterval function on a separate function
+let interval : any;
 
 
-export default function Messages({messages, user, isAdmin, isMod ,modList, joinedRoomId}: MessagesProps) {
+export default function Messages({messages, user, isAdmin, isMod ,modList, joinedRoomId, adminId}: MessagesProps) {
 
-  const [ showBanPopup, setShowBanPopup ] = useState<boolean>(false)
 
-  function hoverBanPopup() {
-    const interval = setInterval(() => {
-      setShowBanPopup(true)
+  function showBanPopupElement(e: MouseEvent<HTMLElement>, messageId: string) {
+    e.stopPropagation()
+    interval = setInterval(() => {      
+      const element = document.querySelector(`.ban-${messageId}`) as HTMLDivElement
+      element.style.transform = 'translateX(0%)'
       clearInterval(interval)
-    }, 2000)
+    },1000)
+  }
+
+  function hideBanPopupElement(e: MouseEvent<HTMLElement>, messageId: string, isUserPost: boolean) {
+    e.stopPropagation()    
+    const hideInterval = setInterval(() => {
+      const element = document.querySelector(`.ban-${messageId}`) as HTMLDivElement      
+      element.style.transform = isUserPost ? 'translateX(300%)' : 'translateX(-300%)'
+      clearInterval(hideInterval)
+    }, 500)
+    clearInterval(interval)
+
   }
 
 
@@ -69,6 +85,7 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
   function showPopup(e: MouseEvent<HTMLElement>, index: number) {
     e.stopPropagation()
 
+
     const popupElement = document.querySelector(`.popup-${index}`) as HTMLDivElement
     if (popupElement) {
       popupElement.classList.remove('popup-hide')
@@ -86,12 +103,14 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
     }
   }
 
+  
 
   return (
     <>
     {messages.map((message, index) => {
       const isUserMod = modList.some((mod) => mod === message?.userId)      
-      const isUserPost = user?.uid === message?.userId
+      const isUserPost = user?.uid === message?.userId    
+      const isUserAdmin = message.userId === adminId
       
     return (
     <div key={index} className='flex flex-col mb-3 mt-1 relative'>
@@ -135,9 +154,11 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
       { (isAdmin && !isUserMod && !isUserPost) ?
       <small onClick={(e) => showPopup(e, index)}
         className={isUserPost ?
-          'opacity-55 ms-auto cursor-pointer':
-          'opacity-55 me-auto cursor-pointer'
+          'opacity-55 ms-auto cursor-pointer relative':
+          'opacity-55 me-auto cursor-pointer relative'          
         }
+        onMouseEnter={(e) => showBanPopupElement(e, message.id)}                
+        onMouseLeave={(e) => hideBanPopupElement(e, message.id, isUserPost)}
       >
         {message?.userName}        
           <ModPopup 
@@ -146,13 +167,41 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
           joinedRoomId={joinedRoomId}
           index={index}
         />
+          <BanUserPopup 
+            position={isUserPost? 'right': 'left'} 
+            messageId={message.id}
+            joinedRoomId={joinedRoomId}
+            userId={message.userId}
+          />
+      </small> :
+      // cant show the ban popup if the message post belongs to
+      // an admin, a mod or yourself,
+      // and you must be a mod
+      (!isUserAdmin && !isUserMod && !isUserPost && isMod) ?
+      <small
+        className={isUserPost ?
+          'opacity-55 ms-auto cursor-pointer relative':
+          'opacity-55 me-auto cursor-pointer relative'          
+        }
+        onMouseEnter={(e) => showBanPopupElement(e, message.id)}                
+        onMouseLeave={(e) => hideBanPopupElement(e, message.id, isUserPost)}
+      >
         
+        {message?.userName}  
+        <BanUserPopup 
+            position={isUserPost? 'right': 'left'} 
+            messageId={message.id}
+            joinedRoomId={joinedRoomId}
+            userId={message.userId}
+          />
       </small> :
       <small className={isUserPost ?      
-        'opacity-55 ms-auto':
-        'opacity-55 me-auto'
-      }>
+        'opacity-55 ms-auto relative':
+        'opacity-55 me-auto relative'
+      }                  
+      >
         {message?.userName}
+        
       </small>
       }
     </div>

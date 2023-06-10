@@ -1,4 +1,4 @@
-import { useEffect, useState,} from  'react';
+import { useEffect, useState, Dispatch, SetStateAction} from  'react';
 
 import { onSnapshot, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
@@ -15,10 +15,7 @@ import Messages from './Messages';
 import Requests from './Requests';
 import AdminModal from './AdminModal';
 
-type JoinedRoomProps = {
-  joinedRoomId : null|string
-  user: any //TODO
-}
+
 // TODO
 export type message = {
   id: string,
@@ -35,7 +32,25 @@ export type requestType = {
   userName: string
 }
 
-export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
+export type joinedRoomType = {
+  admin: string
+  banned: string[]
+  messages: message[]
+  mods: string[]
+  name: string
+  type: 'public'|'private'
+  members?: requestType[]
+  requests?: requestType[]
+}
+
+type JoinedRoomProps = {
+  joinedRoomId : null|string
+  setJoinedRoomId: Dispatch<SetStateAction<null|string>>
+  user: any //TODO
+}
+
+
+export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId}: JoinedRoomProps) {
   const [ messages, setMessages ] = useState<message[]>([])
   const [ requests, setRequests ] = useState<requestType[]>([])
   const [ text, setText ] = useState<string>('')
@@ -45,9 +60,11 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
   const [ interfaceSelected, setInterfaceSelected ] = useState<string>('messages')
   const [ roomType, setRoomType ] = useState<string>('public')
   const [ isAdmin, setIsAdmin ] = useState<boolean>(false)
+  const [ adminId, setAdminId ] = useState<string>('')
   const [ isMod, setIsMod ] = useState<boolean>(false)
   const [ modList, setModList ] = useState<string[]>([])
   const [ showAdminModal, setShowAdminModal ] = useState<boolean>(false)
+
 
 
   const userId = user?.uid || null
@@ -98,17 +115,21 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
     if (joinedRoomId !== null) {
       const joinedRoomRef = doc(db, 'rooms', joinedRoomId)
        unSub = onSnapshot(joinedRoomRef, (doc) => {
-      const data = doc?.data() as any
-      if (doc.exists()) {
-   
+      const data = doc?.data() as joinedRoomType
+      if (doc.exists()) {                 
+        const isBanned = data.banned.some(user => user === auth?.currentUser?.uid)
+        if (isBanned) {
+          return setJoinedRoomId(null)
+        }
+        setAdminId(data.admin)
         setMessages(data.messages)
         setRoomName(data.name)
         setForceScroll(true)
         setRoomType(data.type)
         setModList(data.mods)        
         data.admin === auth?.currentUser?.uid && setIsAdmin(true)
-        data.mods.some((user: requestType) => user.id === auth?.currentUser?.uid) && setIsMod(true)
-        if (data.type === 'private') {
+        data.mods.some((user) => user === auth?.currentUser?.uid) && setIsMod(true)
+        if (data.type === 'private' && data?.requests) {
           setRequests(data.requests)
           //TODO refactor this
         }
@@ -119,10 +140,6 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
     return () => unSub()
   }, [joinedRoomId])
 
-
-  // useEffect(() => {
-  //   console.log(requests, 'requests')
-  // }, [requests])
 
 
   useEffect(() => {
@@ -171,6 +188,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
             isMod={isMod}
             modList={modList}
             joinedRoomId={joinedRoomId}
+            adminId={adminId}            
         />}
 
         { interfaceSelected === 'requests' && 

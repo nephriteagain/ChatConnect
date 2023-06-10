@@ -10,6 +10,7 @@ type member = {
 }
 
 // TODO add right type here
+// TODO refactor this abomination of a component
 export type roomType = {
   admin: string
   type: string
@@ -17,6 +18,7 @@ export type roomType = {
   name: string
   messages: any[] //tbd
   id: string
+  banned: string[]
   members?: member[]
   requests?: member[]
 }
@@ -68,7 +70,27 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
 
   return (
     <div>
-      {rooms.map((room) => {        
+      {rooms.map((room) => {
+        const isBanned = room.banned.some((id) => id === auth?.currentUser?.uid)
+        const isPublic = room.type === 'public' && !isBanned        
+        const canJoin = 
+          !isBanned &&
+          room.type === 'private' &&
+          auth?.currentUser?.uid &&
+          !room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
+          !room?.requests?.some((request) => request?.id === auth?.currentUser?.uid)
+        const isPending =
+          !isBanned &&
+          room.type === 'private' &&
+          auth?.currentUser?.uid &&
+          !room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
+          room?.requests?.some((request) => request?.id === auth?.currentUser?.uid)
+        const isPrivateCanEnter = 
+          !isBanned &&
+          room.type === 'private' &&
+          auth?.currentUser?.uid &&
+          room?.members?.some((member) => member?.id === auth?.currentUser?.uid)
+
         return (
           <div key={room.id}
             className=" bg-myAccent px-2 py-2 my-2 rounded-md shadow-sm w-[200px] max-w-[200px] flex items-center justify-center"
@@ -78,7 +100,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
               {room.name}
             </span>
             {
-            room.type === 'public' && 
+            isPublic && 
             <button onClick={() => {
               setJoinedRoomId(room.id)
               setShowRooms(false)
@@ -89,10 +111,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             </button>
             }
             {
-            room.type === 'private' &&
-            auth?.currentUser?.uid &&
-            !room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
-            !room?.requests?.some((request) => request?.id === auth?.currentUser?.uid) &&
+             canJoin &&
             <button onClick={() => requestJoinRoom(room.id)}
               className="bg-myBackground px-2 py-1 rounded-md"
             >
@@ -100,10 +119,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             </button>
             }
             {
-            room.type === 'private' &&
-            auth?.currentUser?.uid &&
-            !room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
-            room?.requests?.some((request) => request?.id === auth?.currentUser?.uid) &&
+             isPending &&
             <button disabled
               className="bg-myBackground px-2 py-1 rounded-md disabled:opacity-70"
             >
@@ -111,9 +127,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             </button>
             }
             { 
-            room.type === 'private' &&
-            auth?.currentUser?.uid &&
-            room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
+             isPrivateCanEnter &&
             <button onClick={() => {
               setJoinedRoomId(room.id)
               setShowRooms(false)
@@ -123,7 +137,14 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             Enter
           </button>
             }
-            
+            {
+             isBanned &&
+            <button disabled
+              className="bg-myBackground px-2 py-1 rounded-md disabled:opacity-70"
+            >
+              Banned
+            </button>
+            }
             
           </div>
         )

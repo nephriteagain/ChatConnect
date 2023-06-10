@@ -25,9 +25,9 @@ export default function ModPopup({promoteUserToMod, joinedRoomId, userId, index,
   }
 
   return (
-    <div className={`popup-${index} popup-hide bg-mySecondary text-myText px-1 py-[1px] rounded-md w-fit flex items-center justify-center text-md absolute top-100 left-0 overflow-hidden z-[9] transition-all duration-100`}    
+    <div className={`popup-${index} popup-hide bg-mySecondary text-myText px-1 py-[1px] rounded-md w-fit flex items-center justify-center text-md absolute top-100 left-0 overflow-hidden z-[9] transition-all duration-100`}
     >
-      <span>
+      <span className='whitespace-nowrap'>
         mod user?
       </span>
       <button onClick={(e) => promoteUserToMod(e, userId, joinedRoomId as string)}        

@@ -32,7 +32,8 @@ export default function Create({userName}: CreateProps) {
         mods: [],
         messages: [],
         name,
-        type,     
+        type,
+        banned: []     
       }
       : {
         admin: auth.currentUser.uid,
@@ -40,6 +41,7 @@ export default function Create({userName}: CreateProps) {
         messages: [],
         name,
         type,
+        banned: [],
         members: [{
           id: auth.currentUser.uid,
           email: auth.currentUser.email,
