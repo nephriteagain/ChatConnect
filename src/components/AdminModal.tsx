@@ -114,7 +114,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
           <p className='font-bold text-xl'>
             MODS
           </p>
-          {modsData.map(mod => {            
+          {modsData.length > 0 && modsData.map(mod => {            
             return (
               <div key={mod.id}
                 className='flex flex-col items-center justify-center bg-myPrimary text-myBackground font-semibold px-4 py-1 rounded-md my-2 shadow-md drop-shadow-md relative'
@@ -140,12 +140,23 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
                   >
                     <IoMdSettings />
                   </button>
-                  <SettingsPopup id={mod.id} joinedRoomId={joinedRoomId} setModsData={setModsData}/>
+                  <SettingsPopup 
+                    id={mod.id} 
+                    joinedRoomId={joinedRoomId} 
+                    setModsData={setModsData} 
+                    setAdminData={setAdminData} 
+                    adminData={adminData}
+                  />
                   </>
                 }
               </div>
             )
           })}
+          {modsData.length === 0 &&
+            <div>
+              There is currently no mods at this room.
+            </div>
+          }
         </div>
       </div>
     </div>

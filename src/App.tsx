@@ -13,11 +13,12 @@ import { IoMdCloseCircle} from 'react-icons/io'
 import './App.css'
 
 // TODO : figure app what to place here
-export type userDataType = any 
+export type userDataType = any
 
 function App() {
   //TODO mods promotion:DONE, admin passing to mods, admin/mods removing chats, banning users, censoring words, custom censor words for users
   //TODO ADMIN Modal
+  //TODO passing admin status to mods
 
   const [userData, setUserData] = useState<userDataType>(null)
   const [joinedRoomId, setJoinedRoomId] = useState<string|null>(null)
