@@ -110,8 +110,9 @@ async function userSignOut() {
       setShowModal={setShowModal}
       userData={userData}
     />}
-    <div className='flex mt-2 mx-2'>       
+    <div className='flex mt-2 mx-2'>           
       <div className='ms-auto flex items-center justify-center'>      
+      
       <div className='me-4'>
         { userData && <button className='me-2 bg-myText text-mySecondary px-1 py-1 rounded-md hover:scale-105 active:scale-100 transition-all duration-100'
           onClick={() => setShowModal(true)}

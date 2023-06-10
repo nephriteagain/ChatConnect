@@ -12,6 +12,8 @@ import { IoMdCloseCircle} from 'react-icons/io'
 
 import { DEFAULT_ROOM } from './lib/data'
 
+import { TbMessage } from 'react-icons/tb'
+
 import './App.css'
 
 // TODO : figure app what to place here
@@ -73,9 +75,19 @@ function App() {
         >
           <IoMdCloseCircle/>
         </button>
-        {auth.currentUser && <Create userName={userName} />}
+        {auth.currentUser && <Create userName={userName} />}       
         <Rooms setJoinedRoomId={setJoinedRoomId} setShowRooms={setShowRooms} />
       </div>
+
+      <header className='text-center font-bold text-3xl relative mt-4'>        
+        <span>
+          ChatConnect
+        </span>
+        <span className='absolute translate-y-[-10%] ms-1 hover:scale-110 transition-all duration-100'>
+          <TbMessage className="inline hover:fill-green-600 transition-all duration-200"/>
+        </span>
+        </header>
+
       { joinedRoomId && <JoinedRoom joinedRoomId={joinedRoomId} user={userData}/>}
       <button className='absolute z-[2] text-2xl top-2 left-2'
         onClick={() => setShowRooms(true)}

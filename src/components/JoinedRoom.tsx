@@ -51,6 +51,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
 
 
   const userId = user?.uid || null
+ 
 
   async function getUserData() {
     if (!user) return
@@ -106,7 +107,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
         setRoomType(data.type)
         setModList(data.mods)        
         data.admin === auth?.currentUser?.uid && setIsAdmin(true)
-        data.mods.some((user: string) => user === auth?.currentUser?.uid) && setIsMod(true)
+        data.mods.some((user: requestType) => user.id === auth?.currentUser?.uid) && setIsMod(true)
         if (data.type === 'private') {
           setRequests(data.requests)
           //TODO refactor this
@@ -149,12 +150,14 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
         joinedRoomId={joinedRoomId}
         isAdmin={isAdmin}
         isMod={isMod}
+        roomName={roomName}
+        setRoomName={setRoomName}
       />}
       <div className='bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md relative'>
         <p className='text-center'>
           {roomName}
         </p>
-        <MdPeopleAlt className="absolute top-[50%] right-[3%] translate-y-[-50%]"
+        <MdPeopleAlt className="absolute top-[50%] right-[3%] translate-y-[-50%] hover:scale-105 active:scale-100 hover:fill-blue-400 transition-all duration-150"
           onClick={() => setShowAdminModal(true)}
         />
       </div>
