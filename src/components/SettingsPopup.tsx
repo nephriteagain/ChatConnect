@@ -125,7 +125,7 @@ export default function SettingsPopup({id, joinedRoomId, setModsData, setAdminDa
             if (document?.data()) {
               // fetch new mods arr
               const modsArr = document.data()?.mods as string[]              
-              if (modDataArr.length === 0) {
+              if (modsArr.length === 0) {
                 setModsData([])
               } else {
                 modsArr.forEach(mod => {
