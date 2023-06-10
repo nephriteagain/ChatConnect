@@ -159,7 +159,7 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
             <>
             <div className='my-1'>
               <input type='text' maxLength={20}
-              className='outline-none text-myBackground ps-3 pe-2 bg-gray-300 rounded'
+              className='outline-none text-myBackground ps-3 pe-2 bg-gray-300 rounded text-center'
               value={newRoomName}
               onChange={(e) => setNewRoomName(e.currentTarget.value)}
               />
