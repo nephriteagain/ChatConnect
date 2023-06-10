@@ -182,7 +182,8 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
         <textarea value={text}
           className='text-area text-myBackground px-2 py-1 outline-none w-[85%]'
           onChange={(e) => setText(e.currentTarget.value)}
-          onInput={autoAdjustHeight}                                  
+          onInput={autoAdjustHeight}
+          maxLength={500}                               
         />
         <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})}
           className='w-[15%] flex items-center justify-center text-2xl bg-myAccent active:bg-myPrimary transition-all duration-100'

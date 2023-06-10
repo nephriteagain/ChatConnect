@@ -69,7 +69,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             className=" bg-myAccent px-2 py-2 my-2 rounded-md shadow-sm w-[200px] max-w-[200px] flex items-center justify-center"
             style={room.type === 'private' ? {border: '0.2rem solid #000'} : {}}
           >
-            <span className="me-auto">
+            <span className="me-auto truncate">
               {room.name}
             </span>
             {

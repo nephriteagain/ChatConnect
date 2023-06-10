@@ -10,6 +10,8 @@ import JoinedRoom from './components/JoinedRoom'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { IoMdCloseCircle} from 'react-icons/io'
 
+import { DEFAULT_ROOM } from './lib/data'
+
 import './App.css'
 
 // TODO : figure app what to place here
@@ -45,7 +47,13 @@ function App() {
     } else {
       sideBarRef.current.style.transform = 'translateX(-100%)'
     }
-  }, [showRooms])  
+  }, [showRooms])
+
+  useEffect(() => {
+    if (joinedRoomId === null) {
+      setJoinedRoomId(DEFAULT_ROOM)
+    }
+  }, [joinedRoomId])
 
   return (
     <>
