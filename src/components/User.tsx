@@ -19,10 +19,12 @@ interface UserProps {
   userData: userDataType
   setUserData: Dispatch<SetStateAction<userDataType>>
   setJoinedRoomId: Dispatch<SetStateAction<string|null>>
+  userName: string
+  setUserName: Dispatch<SetStateAction<string>>
 }
 
-export default function User({userData, setUserData, setJoinedRoomId}: UserProps) {
-  const [userName, setUserName] = useState<string>('')
+export default function User({userData, setUserData, setJoinedRoomId, userName, setUserName}: UserProps) {
+
   const [showModal, setShowModal ] = useState<boolean>(false)
 
   async function getUserData() {

@@ -3,6 +3,11 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import { collection, doc, onSnapshot, updateDoc, arrayUnion, getDoc } from "firebase/firestore"
 import { auth, db } from "../db/firebase"
 
+type member = {
+  id: string
+  email: string
+  userName: string
+}
 
 // TODO add right type here
 export type roomType = {
@@ -12,8 +17,8 @@ export type roomType = {
   name: string
   messages: any[] //tbd
   id: string
-  members?: string[]
-  requests?: any[]
+  members?: member[]
+  requests?: member[]
 }
 
 interface RoomsProps {
@@ -86,7 +91,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             {
             room.type === 'private' &&
             auth?.currentUser?.uid &&
-            !room?.members?.some((member) => member === auth?.currentUser?.uid) &&
+            !room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
             !room?.requests?.some((request) => request?.id === auth?.currentUser?.uid) &&
             <button onClick={() => requestJoinRoom(room.id)}
               className="bg-myBackground px-2 py-1 rounded-md"
@@ -97,7 +102,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             {
             room.type === 'private' &&
             auth?.currentUser?.uid &&
-            !room?.members?.some((member) => member === auth?.currentUser?.uid) &&
+            !room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
             room?.requests?.some((request) => request?.id === auth?.currentUser?.uid) &&
             <button disabled
               className="bg-myBackground px-2 py-1 rounded-md disabled:opacity-70"
@@ -108,7 +113,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             { 
             room.type === 'private' &&
             auth?.currentUser?.uid &&
-            room?.members?.some((member) => member === auth?.currentUser?.uid) &&
+            room?.members?.some((member) => member?.id === auth?.currentUser?.uid) &&
             <button onClick={() => {
               setJoinedRoomId(room.id)
               setShowRooms(false)

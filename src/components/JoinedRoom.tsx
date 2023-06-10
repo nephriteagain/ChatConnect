@@ -1,4 +1,4 @@
-import { useEffect, useState, } from  'react';
+import { useEffect, useState,} from  'react';
 
 import { onSnapshot, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
@@ -7,6 +7,8 @@ import { generateRandomString } from '../lib/generateId';
 
 import { BsFillSendFill } from 'react-icons/bs'
 import { MdPeopleAlt } from 'react-icons/md'
+
+
 
 import RoomNav from './RoomNav';
 import Messages from './Messages';
@@ -157,7 +159,7 @@ export default function JoinedRoom({joinedRoomId, user}: JoinedRoomProps) {
         />
       </div>
       { roomType === 'private' && <RoomNav interfaceSelected={interfaceSelected} setInterfaceSelected={setInterfaceSelected} />}
-      <div className='chat px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden transition-all duration-100'>
+      <div className='relative chat px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden transition-all duration-100'>
         { interfaceSelected === 'messages' && 
           <Messages 
             messages={messages} 

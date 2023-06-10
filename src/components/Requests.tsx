@@ -19,7 +19,7 @@ export default function Requests({requests, isAdmin, isMod, joinedRoomId}: Reque
     const roomRef = doc(db, 'rooms', joinedRoomId)
     
     await updateDoc(roomRef, {
-      members: arrayUnion(request.id),
+      members: arrayUnion(request),
       requests: arrayRemove(request)
     })
       .catch(err => {

@@ -25,7 +25,7 @@ export interface userType {
 
 export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, isMod}: AdminModalType) {
   const [ modsData, setModsData ] = useState<userType[]>([])
-  const [ adminData, setAdminData ] = useState<userType|null>(null)
+  const [ adminData, setAdminData ] = useState<userType|null>(null)  
 
   function closeModal(e: MouseEvent<HTMLDivElement>) {
     e.stopPropagation()

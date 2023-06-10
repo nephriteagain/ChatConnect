@@ -19,12 +19,13 @@ export type userDataType = any
 
 function App() {
   //TODO mods promotion:DONE, admin passing to mods, admin/mods removing chats, banning users, censoring words, custom censor words for users
-  //TODO ADMIN Modal
-  //TODO passing admin status to mods
+  //TODO ADMIN Modal:DONE
+  //TODO passing admin status to mods:DONE
 
   const [userData, setUserData] = useState<userDataType>(null)
   const [joinedRoomId, setJoinedRoomId] = useState<string|null>(null)
   const [ showRooms, setShowRooms ] = useState(true)
+  const [ userName, setUserName ] = useState<string>('')
 
   const sideBarRef = useRef<HTMLDivElement>(null)
 
@@ -57,7 +58,13 @@ function App() {
 
   return (
     <>
-      <User userData={userData} setUserData={setUserData} setJoinedRoomId={setJoinedRoomId}/>
+      <User 
+        userData={userData} 
+        setUserData={setUserData} 
+        setJoinedRoomId={setJoinedRoomId} 
+        userName={userName} 
+        setUserName={setUserName}
+      />
       <div className='absolute bg-mySecondary h-full top-0 left-0 pt-12 px-4 transition-all duration-200 z-[3]'
         ref={sideBarRef}
       >
@@ -66,7 +73,7 @@ function App() {
         >
           <IoMdCloseCircle/>
         </button>
-        {auth.currentUser && <Create/>}
+        {auth.currentUser && <Create userName={userName} />}
         <Rooms setJoinedRoomId={setJoinedRoomId} setShowRooms={setShowRooms} />
       </div>
       { joinedRoomId && <JoinedRoom joinedRoomId={joinedRoomId} user={userData}/>}

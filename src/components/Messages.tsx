@@ -6,6 +6,7 @@ import { updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore'
 import ModPopup from "./ModPopup"
 import DeleteTextPopup from './DeleteTextPopup'
 
+
 import type { message } from "./JoinedRoom"
 
 interface MessagesProps {
@@ -17,10 +18,20 @@ interface MessagesProps {
   isMod: boolean
 }
 
+type callback = (e: MouseEvent<HTMLButtonElement>) => void
 
 
 
 export default function Messages({messages, user, isAdmin, isMod ,modList, joinedRoomId}: MessagesProps) {
+
+  const [ showBanPopup, setShowBanPopup ] = useState<boolean>(false)
+
+  function hoverBanPopup() {
+    const interval = setInterval(() => {
+      setShowBanPopup(true)
+      clearInterval(interval)
+    }, 2000)
+  }
 
 
   async function promoteUserToMod(e: MouseEvent<HTMLButtonElement>, userId: string, roomId: string,) {
@@ -40,14 +51,16 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
       })
   }
 
-  async function deleteMessage(message: message, roomId: string) {
+  async function deleteMessage(e: MouseEvent<HTMLButtonElement> , message: message, roomId: string, cb: callback) {
     if (typeof roomId !== 'string') return
 
     const roomRef = doc(db, 'rooms', roomId)
     await updateDoc(roomRef, {
       messages: arrayRemove(message)
     })
-      .then(() => alert(`message ${message.id} deleted successfully`))
+      .then(() => {
+        cb(e)        
+      })
       .catch(err => {
         throw new Error(err)
       })

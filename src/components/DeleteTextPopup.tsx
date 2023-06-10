@@ -9,7 +9,7 @@ interface DeleteTextPopupProps {
   index: number
   message: message
   roomId: string|null
-  deleteMessage: (message: message, roomId: string) => void
+  deleteMessage: (e: MouseEvent<HTMLButtonElement> , message: message, roomId: string, cb: (e: MouseEvent<HTMLButtonElement>) => void) => void
 
 }
 
@@ -33,6 +33,7 @@ export default function DeleteTextPopup({position, index, deleteMessage, message
         element.style.transform = 'translateX(150%)'
       }
     }
+    
   }
 
 
@@ -42,7 +43,7 @@ export default function DeleteTextPopup({position, index, deleteMessage, message
     >      
       <span className='flex items-center justify-center'>
         delete message?
-        <button onClick={() => deleteMessage(message, roomId as string)}
+        <button onClick={(e) => deleteMessage(e,message, roomId as string, hideDeleteTextPopup)}
           className='w-fit h-fit'>
           <AiFillCheckSquare className="fill-green-400 text-2xl mx-1"/>
         </button>

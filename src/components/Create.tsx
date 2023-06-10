@@ -4,12 +4,16 @@ import { auth, db, } from "../db/firebase"
 
 import CreateModal from "./CreateModal"
 
+type CreateProps = {
+  userName: string
+}
+
 interface newRoom {
   name: string
   type: string
 }
 
-export default function Create() {
+export default function Create({userName}: CreateProps) {
   const [ showModal, setShowModal ] = useState<boolean>(false)
   
 
@@ -36,7 +40,11 @@ export default function Create() {
         messages: [],
         name,
         type,
-        members: [auth.currentUser.uid],
+        members: [{
+          id: auth.currentUser.uid,
+          email: auth.currentUser.email,
+          userName
+        }],
         requests: []
       }
     await addDoc(roomsRef, data)
