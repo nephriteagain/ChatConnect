@@ -141,6 +141,9 @@ function App() {
       >
         <GiHamburgerMenu />
       </button>
+      <p className='absolute right-2 bottom-2 italic opacity-60 text-sm'>
+        v0.0.1
+      </p>
     </>
   )
 }
