@@ -12,7 +12,12 @@ interface RequestsProps {
   joinedRoomId: string|null
 }
 
-export default function Requests({requests, isAdmin, isMod, joinedRoomId}: RequestsProps) {
+export default function Requests({
+  requests, 
+  isAdmin, 
+  isMod, 
+  joinedRoomId
+}: RequestsProps) {
 
   async function approveJoinRequest(request: requestType) {
     if (!joinedRoomId) return

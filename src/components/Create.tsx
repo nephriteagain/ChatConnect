@@ -63,7 +63,7 @@ export default function Create({userName}: CreateProps) {
     <div>
       {showModal &&<CreateModal handleCreate={createNewRoom} handleModal={setShowModal}/>}
       <button onClick={() => setShowModal(true)}
-        className="mb-6 text-lg bg-green-700 px-2 py-1 rounded-md font-bold hover:bg-green-500 hover:text-myBackground transition-all duration-100"
+        className="mb-6 text-lg bg-green-700 px-2 py-1 rounded-md font-bold hover:bg-green-500 hover:text-myBackground hover:scale-105 transition-all duration-200"
       >
         Create New Room
       </button>

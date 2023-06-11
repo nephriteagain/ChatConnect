@@ -23,7 +23,13 @@ interface UserProps {
   setUserName: Dispatch<SetStateAction<string>>
 }
 
-export default function User({userData, setUserData, setJoinedRoomId, userName, setUserName}: UserProps) {
+export default function User({
+  userData, 
+  setUserData, 
+  setJoinedRoomId, 
+  userName, 
+  setUserName
+}: UserProps) {
 
   const [showModal, setShowModal ] = useState<boolean>(false)
 
@@ -55,6 +61,7 @@ export default function User({userData, setUserData, setJoinedRoomId, userName, 
                 userName: userObject.email,
                 id: uid,
                 joinedAt: Date.now(),
+                censoredWords: []
               })
                 .catch(err => {
                   throw new Error(err)

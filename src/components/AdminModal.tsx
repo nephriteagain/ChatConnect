@@ -25,9 +25,17 @@ export interface userType {
   joinedAt: number
   name: string
   userName: string
+  censoredWords: string[]
 }
 
-export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, isMod, roomName, setRoomName}: AdminModalType) {
+export default function AdminModal({
+  joinedRoomId, 
+  setShowAdminModal, 
+  isAdmin, 
+  isMod, 
+  roomName, 
+  setRoomName
+}: AdminModalType) {
   const [ modsData, setModsData ] = useState<userType[]>([])
   const [ adminData, setAdminData ] = useState<userType|null>(null)  
   const [ newRoomName, setNewRoomName ] = useState<string>('')
@@ -143,14 +151,14 @@ export default function AdminModal({joinedRoomId, setShowAdminModal, isAdmin, is
       <div className="fixed top-0 left-0 h-full w-full bg-myBackground opacity-80 z-[501]"
         onClick={(e) => closeModal(e)}
       />      
-      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[500px] min-w-[300px] max-h-[400px] min-h-[400px] bg-myPrimary rounded">
+      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[300px] max-h-[400px] min-h-[400px] bg-myPrimary rounded">
         <div className='mx-auto mb-4 px-4 py-1 bg-myBackground rounded-md flex flex-col items-center justify-center min-w-[220px]'>
           <p className='text-3xl font-bold '>
             {roomName}
           </p>
           { isAdmin &&
-          <div className='flex flex-col items-center justify-center'>
-            <button className='font-semibold bg-myAccent rounded-md py-[0.1rem] px-2 my-1 hover:bg-red-200 hover:text-red-800 hover:scale-105 active:scale-100 transition-all duration-100'
+          <div className='flex flex-col items-center justify-center mt-2'>
+            <button className='text-[0.75rem] font-semibold bg-myAccent rounded-md py-[0.1rem] px-2 my-1 hover:bg-red-200 hover:text-red-800 hover:scale-105 active:scale-100 transition-all duration-100'
               onClick={(e) => showHideChangeNameInput(e)}
             >
               change name

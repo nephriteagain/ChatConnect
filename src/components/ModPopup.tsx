@@ -9,7 +9,12 @@ interface ModPopupProps {
   index: number
 }
 
-export default function ModPopup({promoteUserToMod, joinedRoomId, userId, index, }: ModPopupProps) {    
+export default function ModPopup({
+  promoteUserToMod, 
+  joinedRoomId, 
+  userId, 
+  index, 
+}: ModPopupProps) {    
   
 
   function hidePopup(e: MouseEvent<HTMLButtonElement>, index: number) {    

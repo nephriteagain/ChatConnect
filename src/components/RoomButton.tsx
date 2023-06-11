@@ -30,7 +30,7 @@ export default function RoomButton({
         setJoinedRoomId(roomId)
         setShowRooms(false)
       }}
-        className="bg-mySecondary px-2 py-1 rounded-md"
+        className="bg-mySecondary px-2 py-1 rounded-md hover:scale-105 hover:bg-green-800 transition-all duration-200"
       >
         Enter
       </button>
@@ -40,7 +40,7 @@ export default function RoomButton({
   if (canJoin) {
     return (
       <button onClick={() => requestJoinRoom(roomId)}
-              className="bg-myBackground px-2 py-1 rounded-md"
+              className="bg-myBackground px-2 py-1 rounded-md hover:scale-105 hover:bg-blue-800 transition-all duration-200"
             >
               Join
             </button>
@@ -63,7 +63,7 @@ export default function RoomButton({
         setJoinedRoomId(roomId)
         setShowRooms(false)
       }}
-      className="bg-mySecondary px-2 py-1 rounded-md"
+      className="bg-mySecondary px-2 py-1 rounded-md hover:scale-105 hover:bg-green-800 transition-all duration-200"
       >
       Enter
     </button>

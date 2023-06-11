@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { auth, db} from './db/firebase'
 import { onAuthStateChanged, } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, } from 'firebase/firestore'
 
 import User from './components/User'
 import Create from './components/Create'
@@ -22,8 +22,7 @@ export type userDataType = any
 
 function App() {
   //TODO mods promotion:DONE, admin passing to mods, admin/mods removing chats, banning users, censoring words, custom censor words for users
-  //TODO ADMIN Modal:DONE
-  //TODO passing admin status to mods:DONE
+  // TODO IMPORTANT messages should be a new collection instead of an array
 
   const [userData, setUserData] = useState<userDataType>(null)
   const [joinedRoomId, setJoinedRoomId] = useState<string|null>(null)
@@ -106,10 +105,10 @@ function App() {
       <div className='absolute bg-mySecondary h-full top-0 left-0 pt-12 px-4 transition-all duration-200 z-[3]'
         ref={sideBarRef}
       >
-        <button className='absolute right-2 top-2 text-3xl text-red-600'
+        <button className='absolute right-2 top-2 text-3xl text-red-600 hover:text-red-400 hover:scale-110 active:scale-100 transition-all duration-200'
           onClick={() => setShowRooms(false)}
         >
-          <IoMdCloseCircle/>
+          <IoMdCloseCircle />
         </button>
         {auth.currentUser && <Create userName={userName} />}       
         <Rooms setJoinedRoomId={setJoinedRoomId} setShowRooms={setShowRooms} />
@@ -119,7 +118,7 @@ function App() {
         <span>
           {title.split('').map((char,index) => {
             return (
-              <span className={`title-name char-${index} transition-all duration-300 ease-in-out`}>
+              <span key={index} className={`title-name char-${index} transition-all duration-300 ease-in-out`}>
                 {char}
               </span>
             )

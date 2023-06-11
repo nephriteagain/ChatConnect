@@ -3,7 +3,10 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import { collection, doc, onSnapshot, updateDoc, arrayUnion, getDoc } from "firebase/firestore"
 import { auth, db } from "../db/firebase"
 
+import { RiGitRepositoryPrivateLine } from 'react-icons/ri'
+
 import RoomButton from "./RoomButton"
+
 
 type member = {
   id: string
@@ -31,7 +34,7 @@ interface RoomsProps {
 }
 
 export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
-  const [ rooms, setRooms ] = useState<roomType[]>([])
+  const [ rooms, setRooms ] = useState<roomType[]>([])  
 
   const roomsRef = collection(db, 'rooms')
 
@@ -72,7 +75,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
 
   return (
     <div>
-      {rooms.map((room) => {
+      {rooms.map((room) => {        
         const isBanned = room.banned.some((id) => id === auth?.currentUser?.uid)
         const isPublic = room.type === 'public' && !isBanned        
         const canJoin = 
@@ -95,9 +98,13 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
 
         return (
           <div key={room.id}
-            className=" bg-myAccent px-2 py-2 my-2 rounded-md shadow-sm w-[200px] max-w-[200px] flex items-center justify-center"
-            style={room.type === 'private' ? {border: '0.2rem solid #000'} : {}}
-          >
+            className=" bg-myAccent px-2 py-2 my-2 rounded-md shadow-sm w-[200px] max-w-[200px] flex items-center justify-center hover:translate-x-1 transtion-all duration-200"
+            >
+            {room.type === 'private' && 
+              <span className="me-1">
+                <RiGitRepositoryPrivateLine />
+              </span>
+            }
             <span className="me-auto truncate">
               {room.name}
             </span>

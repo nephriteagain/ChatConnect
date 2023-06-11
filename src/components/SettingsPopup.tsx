@@ -15,7 +15,12 @@ interface SettingsPopupProps {
   adminData: userType|null
 }
 
-export default function SettingsPopup({id, joinedRoomId, setModsData, setAdminData, adminData}: SettingsPopupProps) {
+export default function SettingsPopup({
+  id, joinedRoomId, 
+  setModsData, 
+  setAdminData, 
+  adminData
+}: SettingsPopupProps) {
   const [ showUnModConfirmation, setShowUnModConfirmation ] = useState<boolean>(false)
   const [ showPromoteToAdminConfirmation, setShowPromoteToAdminConfirmation ] = useState<boolean>(false)
 

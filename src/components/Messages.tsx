@@ -19,6 +19,7 @@ interface MessagesProps {
   joinedRoomId: string|null
   isMod: boolean
   adminId: string
+  customCensoredWords: string[]
 }
 
 type callback = (e: MouseEvent<HTMLButtonElement>) => void
@@ -27,7 +28,16 @@ type callback = (e: MouseEvent<HTMLButtonElement>) => void
 let timeout : any;
 
 
-export default function Messages({messages, user, isAdmin, isMod ,modList, joinedRoomId, adminId}: MessagesProps) {
+export default function Messages({
+  messages, 
+  user, 
+  isAdmin, 
+  isMod ,
+  modList, 
+  joinedRoomId, 
+  adminId,
+  customCensoredWords
+}: MessagesProps) {
 
 
   function showBanPopupElement(e: MouseEvent<HTMLElement>, messageId: string) {
@@ -104,6 +114,24 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
     }
   }
 
+  function customFilter(phrase: string) {
+    if (customCensoredWords.length === 0) {
+      return phrase
+    }
+
+    const wordsArr = phrase.split(' ')
+    const filteredArr = wordsArr.map(word => {
+      const censor = '*'
+      const isBadWord = customCensoredWords.some(customWord => customWord === word)
+      if (isBadWord) {
+        return censor.repeat(word.length)
+      }
+      return word
+    })    
+    const filteredPhrase =  filteredArr.join(' ')
+    return filteredPhrase
+  }
+
   
 
   return (
@@ -113,8 +141,8 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
       const isUserPost = user?.uid === message?.userId    
       const isUserAdmin = message.userId === adminId
       
-      const filteredText = filterPhrase(message.text)
-      const filterName = filterPhrase(message.userName)
+      const filteredText = customFilter(filterPhrase(message.text))
+      const filterName = customFilter(filterPhrase(message.userName))
 
     return (
     <div key={index} className='flex flex-col mb-3 mt-1 relative'>

@@ -7,13 +7,14 @@ import { generateRandomString } from '../lib/generateId';
 
 import { BsFillSendFill } from 'react-icons/bs'
 import { MdPeopleAlt } from 'react-icons/md'
-
+import { FaBan } from 'react-icons/fa'
 
 
 import RoomNav from './RoomNav';
 import Messages from './Messages';
 import Requests from './Requests';
 import AdminModal from './AdminModal';
+import CustomBannedWordsModal from './CustomBannedWordsModal';
 
 
 // TODO
@@ -51,7 +52,12 @@ type JoinedRoomProps = {
 }
 
 
-export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId, userName}: JoinedRoomProps) {
+export default function JoinedRoom({
+  joinedRoomId, 
+  user, 
+  setJoinedRoomId, 
+  userName
+}: JoinedRoomProps) {
   const [ messages, setMessages ] = useState<message[]>([])
   const [ requests, setRequests ] = useState<requestType[]>([])
   const [ text, setText ] = useState<string>('')
@@ -64,6 +70,8 @@ export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId, userNam
   const [ isMod, setIsMod ] = useState<boolean>(false)
   const [ modList, setModList ] = useState<string[]>([])
   const [ showAdminModal, setShowAdminModal ] = useState<boolean>(false)
+  const [ showCustomBannedWordsModal, setShowCustomBannedWordsModal ] = useState<boolean>(false)
+  const [ customCensoredWords, setCustomCensoredWords ] = useState<string[]>([])
 
 
 
@@ -158,15 +166,30 @@ export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId, userNam
         roomName={roomName}
         setRoomName={setRoomName}
       />}
+      {showCustomBannedWordsModal && auth?.currentUser?.uid &&
+      <CustomBannedWordsModal 
+        setShowModal={setShowCustomBannedWordsModal}
+        customCensoredWords={customCensoredWords}
+        setCustomCensoredWords={setCustomCensoredWords}
+      />
+      }
       <div className='bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md relative'>
         <p className='text-center'>
-          {roomName}
+          {roomName.length === 0 ? '' : roomName}
         </p>
         <MdPeopleAlt className="absolute top-[50%] right-[3%] translate-y-[-50%] hover:scale-105 active:scale-100 hover:fill-blue-400 transition-all duration-150"
           onClick={() => setShowAdminModal(true)}
         />
+        <FaBan className="absolute top-[50%] left-[3%] translate-y-[-50%] hover:scale-105 active:scale-100 hover:fill-red-600 transition-all duration-100"
+          onClick={() => setShowCustomBannedWordsModal(true)}
+        />
+
       </div>
-      { roomType === 'private' && <RoomNav interfaceSelected={interfaceSelected} setInterfaceSelected={setInterfaceSelected} />}
+      { roomType === 'private' && 
+        <RoomNav 
+          interfaceSelected={interfaceSelected} 
+          setInterfaceSelected={setInterfaceSelected} 
+      />}
       <div className='relative chat px-2 py-2 mt-4  bg-myPrimary text-myBackground rounded-xl h-[60vh] overflow-y-auto overflow-x-hidden transition-all duration-100'>
         { interfaceSelected === 'messages' && 
           <Messages 
@@ -176,7 +199,8 @@ export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId, userNam
             isMod={isMod}
             modList={modList}
             joinedRoomId={joinedRoomId}
-            adminId={adminId}            
+            adminId={adminId}  
+            customCensoredWords={customCensoredWords}          
         />}
 
         { interfaceSelected === 'requests' && 

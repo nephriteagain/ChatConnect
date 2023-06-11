@@ -15,7 +15,12 @@ interface BanUserPopupProps {
 
 
 
-export default function BanUserPopup({position, messageId, joinedRoomId, userId}: BanUserPopupProps) {
+export default function BanUserPopup({
+  position, 
+  messageId, 
+  joinedRoomId, 
+  userId
+}: BanUserPopupProps) {
 
 
   function hideBanPopup(e: MouseEvent<HTMLButtonElement>, messageId: string, position: string) {

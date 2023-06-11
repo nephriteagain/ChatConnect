@@ -15,7 +15,13 @@ interface DeleteTextPopupProps {
 
 
 
-export default function DeleteTextPopup({position, index, deleteMessage, message, roomId}: DeleteTextPopupProps) {
+export default function DeleteTextPopup({
+  position, 
+  index, 
+  deleteMessage, 
+  message, 
+  roomId
+}: DeleteTextPopupProps) {
   const style : {[key:string]: string} = position === 'left'
     ? { position: 'absolute', top: '100%', left: '0' , transform: 'translateX(-150%)',}
     : { position: 'absolute', top: '100%', right: '0', transform: 'translateX(150%)', }

@@ -13,7 +13,12 @@ interface UserModalTypes {
 
 }
 
-export default function UserModal({userName, setUserName, setShowModal, userData}: UserModalTypes) {
+export default function UserModal({
+  userName, 
+  setUserName, 
+  setShowModal, 
+  userData
+}: UserModalTypes) {
   const [ newName, setNewName ] = useState<string>(userName)
   
   async function changeUserName() {
