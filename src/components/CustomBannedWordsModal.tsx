@@ -27,7 +27,7 @@ export default function CustomBannedWordsModal({
 
   function changeWord(e: ChangeEvent<HTMLInputElement>) {
     const value = e.currentTarget.value
-    const newValue = value.replace(' ', '')
+    const newValue = value.replace(/\s/g, '')
     setWord(newValue)
   }
 

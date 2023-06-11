@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState, ChangeEvent } from 'react'
 
 import { db } from '../db/firebase'
 import {doc, updateDoc} from 'firebase/firestore'
@@ -37,6 +37,13 @@ export default function UserModal({
       })
   }
 
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    e.stopPropagation()
+    const value = e.currentTarget.value
+    const newValue = value.replace(/\s/g, '') // whitespace not allowed
+    setNewName(newValue)
+  }
+
   return (
     <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center z-20'>
       <div className='fixed top-0 left-0 w-full h-full bg-black opacity-60'></div>
@@ -49,7 +56,7 @@ export default function UserModal({
           className='outline-none text-mySecondary px-2 py-1 rounded-md'
           name='name'          
           value={newName}
-          onChange={(e) => setNewName(e.currentTarget.value)}
+          onChange={(e) => handleChange(e)}
         />
         <div className='my-2'>
           <button onClick={() => changeUserName()}

@@ -15,12 +15,14 @@ import { MdOutlineEdit} from 'react-icons/md'
 // TYPES
 import type { userDataType } from '../App'
 
+
 interface UserProps {
   userData: userDataType
   setUserData: Dispatch<SetStateAction<userDataType>>
   setJoinedRoomId: Dispatch<SetStateAction<string|null>>
   userName: string
   setUserName: Dispatch<SetStateAction<string>>
+
 }
 
 export default function User({
@@ -28,20 +30,30 @@ export default function User({
   setUserData, 
   setJoinedRoomId, 
   userName, 
-  setUserName
+  setUserName,
+
+
 }: UserProps) {
 
   const [showModal, setShowModal ] = useState<boolean>(false)
+  // const [ newUser, setNewUser ] = useState<boolean>(false)
+  const [ signedIn, setSignedIn ] = useState<boolean>(false)
+
 
   async function getUserData() {
     if (!userData) return
     const userRef = doc(db, 'users', userData.uid)
-    const data = await getDoc(userRef)
+    await getDoc(userRef)
+      .then((doc) => {
+        console.log(doc.exists(), 'exist')
+        if (doc.exists()) {
+          setUserName(doc.data().userName)
+          console.log(doc.data(), 'user data')
+        }
+      })
       .catch(err => {
         throw new Error(err)
-      })
-    const userNameData = data.data()?.userName
-    userNameData && setUserName(userNameData)
+      })    
   }
 
 
@@ -53,8 +65,7 @@ export default function User({
         const userDbRef = doc(db, 'users', uid)
         getDoc(userDbRef)
           .then(result => {
-            const user = result.data()
-            if (!user) {
+            if (!result.exists()) {
               setDoc(userDbRef, {
                 name: userObject.displayName,
                 email: userObject.email,
@@ -63,18 +74,20 @@ export default function User({
                 joinedAt: Date.now(),
                 censoredWords: []
               })
+                // .then(() => setNewUser(true))
                 .catch(err => {
                   throw new Error(err)
                 })
             }
           })
+          .then(() => setSignedIn(true))
           .catch(err => {
             throw new Error(err)
           })
       })
       .catch(err => {
         throw new Error(err)
-      })
+      })            
     
 }
 
@@ -92,7 +105,7 @@ async function userSignOut() {
 
   useEffect(() => {
     getUserData()
-  }, [userData])
+  }, [signedIn])
 
 
   const login = userData

@@ -136,7 +136,7 @@ function App() {
           user={userData}
           userName={userName}
       />}
-      <button className='absolute z-[2] text-2xl top-2 left-2'
+      <button className='absolute z-[2] text-2xl sm:top-2 top-4 sm:left-2 left-4 sm:scale-150 scale-[2]'
         onClick={() => setShowRooms(true)}
       >
         <GiHamburgerMenu />
