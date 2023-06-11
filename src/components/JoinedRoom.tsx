@@ -180,9 +180,9 @@ export default function JoinedRoom({
         <MdPeopleAlt className="absolute top-[50%] right-[3%] translate-y-[-50%] hover:scale-105 active:scale-100 hover:fill-blue-400 transition-all duration-150"
           onClick={() => setShowAdminModal(true)}
         />
-        <FaBan className="absolute top-[50%] left-[3%] translate-y-[-50%] hover:scale-105 active:scale-100 hover:fill-red-600 transition-all duration-100"
+        { auth?.currentUser?.uid && <FaBan className="absolute top-[50%] left-[3%] translate-y-[-50%] hover:scale-105 active:scale-100 hover:fill-red-600 transition-all duration-100"
           onClick={() => setShowCustomBannedWordsModal(true)}
-        />
+        />}
 
       </div>
       { roomType === 'private' && 
