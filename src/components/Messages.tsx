@@ -24,7 +24,7 @@ interface MessagesProps {
 type callback = (e: MouseEvent<HTMLButtonElement>) => void
 
 // need for clearInterval function on a separate function
-let interval : any;
+let timeout : any;
 
 
 export default function Messages({messages, user, isAdmin, isMod ,modList, joinedRoomId, adminId}: MessagesProps) {
@@ -32,21 +32,21 @@ export default function Messages({messages, user, isAdmin, isMod ,modList, joine
 
   function showBanPopupElement(e: MouseEvent<HTMLElement>, messageId: string) {
     e.stopPropagation()
-    interval = setInterval(() => {      
+    timeout = setTimeout(() => {      
       const element = document.querySelector(`.ban-${messageId}`) as HTMLDivElement
       element.style.transform = 'translateX(0%)'
-      clearInterval(interval)
+      clearInterval(timeout)
     },1000)
   }
 
   function hideBanPopupElement(e: MouseEvent<HTMLElement>, messageId: string, isUserPost: boolean) {
     e.stopPropagation()    
-    const hideInterval = setInterval(() => {
+    const hideInterval = setTimeout(() => {
       const element = document.querySelector(`.ban-${messageId}`) as HTMLDivElement      
       element.style.transform = isUserPost ? 'translateX(300%)' : 'translateX(-300%)'
       clearInterval(hideInterval)
     }, 500)
-    clearInterval(interval)
+    clearInterval(timeout)
 
   }
 

@@ -46,7 +46,7 @@ export type joinedRoomType = {
 type JoinedRoomProps = {
   joinedRoomId : null|string
   setJoinedRoomId: Dispatch<SetStateAction<null|string>>
-  user: any //TODO
+  user: Record<string,any>//TODO
   userName: string
 }
 
@@ -109,11 +109,10 @@ export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId, userNam
         const isBanned = data.banned.some(user => user === auth?.currentUser?.uid)
         if (isBanned) {
           return setJoinedRoomId(null)
-        }
+        }        
         setAdminId(data.admin)
         setMessages(data.messages)
         setRoomName(data.name)
-        setForceScroll(true)
         setRoomType(data.type)
         setModList(data.mods)        
         data.admin === auth?.currentUser?.uid && setIsAdmin(true)
@@ -121,6 +120,10 @@ export default function JoinedRoom({joinedRoomId, user, setJoinedRoomId, userNam
         if (data.type === 'private' && data?.requests) {
           setRequests(data.requests)
           //TODO refactor this
+        }
+        // scrolling to bottom when new message are made
+        if (data.messages.length > messages.length) {
+          setForceScroll(true)
         }
       }            
     })

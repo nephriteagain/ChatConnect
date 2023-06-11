@@ -32,6 +32,8 @@ function App() {
 
   const sideBarRef = useRef<HTMLDivElement>(null)
 
+  const title = 'ChatConnect'
+
   useEffect(() => {   
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -42,6 +44,20 @@ function App() {
         setUserData(null)
       }
     })
+
+    // title styles
+    let index = 0    
+    const interval = setInterval(() => {
+      const allElement = document.querySelectorAll('.title-name') as NodeListOf<HTMLSpanElement>
+      allElement.forEach(element => {
+        element.style.color = '#fff'    
+      })
+      const charElement = document.querySelector(`.char-${index}`) as HTMLSpanElement
+      charElement.style.color = '#16a34a'     
+      index = index === title.length - 1 ? 0 : index + 1
+      
+    }, 500)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -101,7 +117,13 @@ function App() {
 
       <header className='text-center font-bold text-3xl relative mt-4'>        
         <span>
-          ChatConnect
+          {title.split('').map((char,index) => {
+            return (
+              <span className={`title-name char-${index} transition-all duration-300 ease-in-out`}>
+                {char}
+              </span>
+            )
+          })}
         </span>
         <span className='absolute translate-y-[-10%] ms-1 hover:scale-110 transition-all duration-100'>
           <TbMessage className="inline hover:fill-green-600 transition-all duration-200"/>

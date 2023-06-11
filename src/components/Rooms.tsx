@@ -3,6 +3,8 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react"
 import { collection, doc, onSnapshot, updateDoc, arrayUnion, getDoc } from "firebase/firestore"
 import { auth, db } from "../db/firebase"
 
+import RoomButton from "./RoomButton"
+
 type member = {
   id: string
   email: string
@@ -99,52 +101,17 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
             <span className="me-auto truncate">
               {room.name}
             </span>
-            {
-            isPublic && 
-            <button onClick={() => {
-              setJoinedRoomId(room.id)
-              setShowRooms(false)
-            }}
-              className="bg-mySecondary px-2 py-1 rounded-md"
-            >
-              Enter
-            </button>
-            }
-            {
-             canJoin &&
-            <button onClick={() => requestJoinRoom(room.id)}
-              className="bg-myBackground px-2 py-1 rounded-md"
-            >
-              Join
-            </button>
-            }
-            {
-             isPending &&
-            <button disabled
-              className="bg-myBackground px-2 py-1 rounded-md disabled:opacity-70"
-            >
-              Pending
-            </button>
-            }
-            { 
-             isPrivateCanEnter &&
-            <button onClick={() => {
-              setJoinedRoomId(room.id)
-              setShowRooms(false)
-            }}
-            className="bg-mySecondary px-2 py-1 rounded-md"
-            >
-            Enter
-          </button>
-            }
-            {
-             isBanned &&
-            <button disabled
-              className="bg-myBackground px-2 py-1 rounded-md disabled:opacity-70"
-            >
-              Banned
-            </button>
-            }
+            <RoomButton 
+              isBanned={isBanned}
+              isPending={isPending}
+              isPrivateCanEnter={isPrivateCanEnter}
+              isPublic={isPublic}
+              canJoin={canJoin}
+              setJoinedRoomId={setJoinedRoomId}
+              roomId={room.id}
+              setShowRooms={setShowRooms}
+              requestJoinRoom={requestJoinRoom}
+            />
             
           </div>
         )
