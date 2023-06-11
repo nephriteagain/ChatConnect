@@ -102,7 +102,7 @@ function App() {
         userName={userName} 
         setUserName={setUserName}
       />
-      <div className='absolute bg-mySecondary h-full top-0 left-0 pt-12 px-4 transition-all duration-200 z-[3]'
+      <div className='absolute bg-mySecondary h-full top-0 left-0 pt-12 px-4 transition-all duration-200 z-[3] min-w-[200px]'
         ref={sideBarRef}
       >
         <button className='absolute right-2 top-2 text-3xl text-red-600 hover:text-red-400 hover:scale-110 active:scale-100 transition-all duration-200'
@@ -110,7 +110,7 @@ function App() {
         >
           <IoMdCloseCircle />
         </button>
-        {auth.currentUser && <Create userName={userName} />}       
+        {auth?.currentUser && <Create userName={userName} />}       
         <Rooms setJoinedRoomId={setJoinedRoomId} setShowRooms={setShowRooms} />
       </div>
 
