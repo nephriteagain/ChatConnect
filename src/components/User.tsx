@@ -72,7 +72,9 @@ export default function User({
             throw new Error(err)
           })
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        throw new Error(err)
+      })
     
 }
 

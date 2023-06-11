@@ -151,7 +151,7 @@ export default function AdminModal({
       <div className="fixed top-0 left-0 h-full w-full bg-myBackground opacity-80 z-[501]"
         onClick={(e) => closeModal(e)}
       />      
-      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[300px] max-h-[400px] min-h-[400px] bg-myPrimary rounded">
+      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[300px] max-h-[400px] min-h-[400px] bg-mySecondary rounded-md">
         <div className='mx-auto mb-4 px-4 py-1 bg-myBackground rounded-md flex flex-col items-center justify-center min-w-[220px]'>
           <p className='text-3xl font-bold '>
             {roomName}
@@ -190,7 +190,7 @@ export default function AdminModal({
           }
           
         </div>
-        <div className='flex flex-col items-center justify-center bg-mySecondary px-2 py-2 rounded-md mb-8'>
+        <div className='flex flex-col items-center justify-center bg-myBackground px-2 py-2 rounded-md mb-8'>
           <p className='font-bold text-2xl'>ADMIN</p>
           <div className='font-semibold text-xl'>
             {adminData?.userName}
@@ -199,7 +199,7 @@ export default function AdminModal({
             {adminData?.id}
           </div>
         </div>
-        <div className='flex flex-col items-center justify-center bg-myAccent rounded-md mb-6 px-2 py-2'>
+        <div className='flex flex-col items-center justify-center bg-myBackground rounded-md mb-6 px-2 py-2'>
           <p className='font-bold text-xl'>
             MODS
           </p>

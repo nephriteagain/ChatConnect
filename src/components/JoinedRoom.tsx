@@ -98,7 +98,7 @@ export default function JoinedRoom({
       messages: arrayUnion(msgObj)
     })
       .then(() => {
-        console.log('message sent')
+
         setText('')
       })
       .catch(err => {
@@ -174,7 +174,7 @@ export default function JoinedRoom({
       />
       }
       <div className='bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md relative'>
-        <p className='text-center'>
+        <p className='text-center min-h-[24px]'>
           {roomName.length === 0 ? '' : roomName}
         </p>
         <MdPeopleAlt className="absolute top-[50%] right-[3%] translate-y-[-50%] hover:scale-105 active:scale-100 hover:fill-blue-400 transition-all duration-150"

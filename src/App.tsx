@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, } from 'react'
 import { auth, db} from './db/firebase'
 import { onAuthStateChanged, } from 'firebase/auth'
 import { doc, getDoc, } from 'firebase/firestore'
@@ -36,10 +36,10 @@ function App() {
   useEffect(() => {   
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log('user signed in', user)
+
         setUserData(user)
       } else {
-        console.log('user signed out')
+
         setUserData(null)
       }
     })
