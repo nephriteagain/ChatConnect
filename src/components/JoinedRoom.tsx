@@ -1,6 +1,6 @@
 import { useEffect, useState, Dispatch, SetStateAction} from  'react';
 
-import { onSnapshot, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
+import { onSnapshot, doc, updateDoc, arrayUnion, } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
 
 import { generateRandomString } from '../lib/generateId';

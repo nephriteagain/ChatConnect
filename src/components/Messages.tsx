@@ -1,6 +1,6 @@
-import { useState, MouseEvent } from 'react'
+import { MouseEvent } from 'react'
 
-import { auth, db } from "../db/firebase"
+import { db } from "../db/firebase"
 import { updateDoc, doc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 import ModPopup from "./ModPopup"

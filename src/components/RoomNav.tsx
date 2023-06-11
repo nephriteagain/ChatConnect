@@ -5,7 +5,7 @@ interface RoomNavProps {
   setInterfaceSelected: Dispatch<SetStateAction<string>>
 }
 
-export default function RoomNav({interfaceSelected, setInterfaceSelected}: RoomNavProps) {
+export default function RoomNav({setInterfaceSelected}: RoomNavProps) {
 
 
   const messageRef = useRef<HTMLDivElement>(null)

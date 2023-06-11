@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { addDoc, collection, doc, updateDoc, arrayUnion } from "firebase/firestore"
+import { addDoc, collection, } from "firebase/firestore"
 import { auth, db, } from "../db/firebase"
 
 import CreateModal from "./CreateModal"
