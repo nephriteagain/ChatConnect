@@ -45,10 +45,10 @@ export default function User({
     const userRef = doc(db, 'users', userData.uid)
     await getDoc(userRef)
       .then((doc) => {
-        console.log(doc.exists(), 'exist')
+
         if (doc.exists()) {
           setUserName(doc.data().userName)
-          console.log(doc.data(), 'user data')
+
         }
       })
       .catch(err => {

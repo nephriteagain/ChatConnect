@@ -151,7 +151,7 @@ export default function AdminModal({
       <div className="fixed top-0 left-0 h-full w-full bg-myBackground opacity-80 z-[501]"
         onClick={(e) => closeModal(e)}
       />      
-      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[300px] max-h-[400px] min-h-[400px] bg-mySecondary rounded-md">
+      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[280px] max-h-[400px] min-h-[400px] bg-mySecondary rounded-md">
         <div className='mx-auto mb-4 px-4 py-1 bg-myBackground rounded-md flex flex-col items-center justify-center min-w-[220px]'>
           <p className='text-3xl font-bold '>
             {roomName}
