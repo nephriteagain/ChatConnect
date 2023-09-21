@@ -1,6 +1,8 @@
 
 import {useState, useRef, ChangeEvent, MouseEvent, Dispatch, SetStateAction} from 'react'
 
+import { motion } from 'framer-motion'
+
 interface CreateModalProps  {
   handleCreate: (roomData: roomData) => void
   handleModal: Dispatch<SetStateAction<boolean>>
@@ -47,8 +49,20 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
 
   return (
     <div className='fixed top-0 left-0 w-[100vw] h-[100vh] bg-[transparent] flex items-center justify-center'>
-      <div className='fixed top-0 left-0 w-[100vw] h-[100vh] bg-black opacity-60 z-[100]'></div>
-      <div className='mb-[10%] z-[101] bg-mySecondary p-8 rounded-md w-[450px] min-w-[300px] flex flex-col items-center justify-center'>
+      <motion.div 
+        className='fixed top-0 left-0 w-[100vw] h-[100vh] bg-black opacity-60 z-[100]'
+        initial={{opacity: 0}}
+        animate={{opacity: 0.6}}
+        transition={{duration:0.15}}        
+        exit={{opacity: 0}}
+        />
+      <motion.div 
+        className='mb-[10%] z-[101] bg-mySecondary p-8 rounded-md w-[450px] min-w-[300px] flex flex-col items-center justify-center'
+        initial={{scale:0.1}}
+        animate={{scale: 1}}
+        transition={{duration:0.15}}        
+        exit={{scale: 0.1}}
+      >
         <div className='flex flex-col items-center justify-center mb-4  '>
           <label className='text-lg font-semibold'>Room Name</label>
           <input 
@@ -91,7 +105,7 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
             Cancel
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

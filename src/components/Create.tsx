@@ -3,6 +3,7 @@ import { addDoc, collection, } from "firebase/firestore"
 import { auth, db, } from "../db/firebase"
 
 import CreateModal from "./CreateModal"
+import { AnimatePresence } from 'framer-motion'
 
 type CreateProps = {
   userName: string
@@ -61,7 +62,9 @@ export default function Create({userName}: CreateProps) {
   
   return (
     <div>
-      {showModal &&<CreateModal handleCreate={createNewRoom} handleModal={setShowModal}/>}
+      <AnimatePresence>
+        {showModal &&<CreateModal handleCreate={createNewRoom} handleModal={setShowModal}/>}
+      </AnimatePresence>
       <button onClick={() => setShowModal(true)}
         className="mb-6 text-lg bg-green-700 px-2 py-1 rounded-md font-bold hover:bg-green-500 hover:text-myBackground hover:scale-105 transition-all duration-200"
       >

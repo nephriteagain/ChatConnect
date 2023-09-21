@@ -6,7 +6,7 @@ import { db } from '../db/firebase'
 
 import { IoMdSettings } from 'react-icons/io'
 import { AiFillCloseSquare, AiFillCheckSquare } from 'react-icons/ai'
-
+import { motion, } from 'framer-motion'
 
 import SettingsPopup from './SettingsPopup'
 
@@ -148,10 +148,20 @@ export default function AdminModal({
 
   return (
     <div className="fixed top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center z-[500]">
-      <div className="fixed top-0 left-0 h-full w-full bg-myBackground opacity-80 z-[501]"
+      <motion.div className="fixed top-0 left-0 h-full w-full bg-myBackground opacity-80 z-[501]"
         onClick={(e) => closeModal(e)}
+        initial={{opacity: 0}}
+        animate={{opacity: 0.8}}
+        transition={{duration:0.15}}        
+        exit={{opacity: 0}}
       />      
-      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[280px] max-h-[400px] min-h-[400px] bg-mySecondary rounded-md">
+      <motion.div 
+        initial={{scale:0.1}}
+        animate={{scale: 1}}
+        transition={{duration:0.15}}        
+        exit={{scale: 0.1}}
+        className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[280px] max-h-[400px] min-h-[400px] bg-mySecondary rounded-md border-4 border-myAccent"
+      >
         <div className='mx-auto mb-4 px-4 py-1 bg-myBackground rounded-md flex flex-col items-center justify-center min-w-[220px]'>
           <p className='text-3xl font-bold '>
             {roomName}
@@ -247,7 +257,7 @@ export default function AdminModal({
             </div>
           }
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

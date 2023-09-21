@@ -11,6 +11,7 @@ import { filterPhrase } from '../lib/data'
 
 import type { message } from "./JoinedRoom"
 
+
 interface MessagesProps {
   messages: message[]
   user: any //TODO
@@ -145,7 +146,7 @@ export default function Messages({
       const filterName = customFilter(filterPhrase(message.userName))
 
     return (
-    <div key={index} className='flex flex-col mb-3 mt-1 relative'>
+    <div key={message.id} className='flex flex-col mb-3 mt-1 relative'>
       {
       (isAdmin || isMod || isUserPost) ?
       <div onClick={(e) => showDeleteTextPopup(e, index)}

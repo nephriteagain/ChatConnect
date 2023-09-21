@@ -9,6 +9,7 @@ import { BsFillSendFill } from 'react-icons/bs'
 import { MdPeopleAlt } from 'react-icons/md'
 import { FaBan } from 'react-icons/fa'
 
+import { AnimatePresence, motion } from 'framer-motion'
 
 import RoomNav from './RoomNav';
 import Messages from './Messages';
@@ -165,8 +166,9 @@ export default function JoinedRoom({
 
   return (
     <div className='min-w-[280px] max-w-[500px] mx-auto overflow-hidden mt-8'>
-      {showAdminModal && 
-      <AdminModal 
+      <AnimatePresence>
+        {showAdminModal && 
+        <AdminModal 
         setShowAdminModal={setShowAdminModal}
         joinedRoomId={joinedRoomId}
         isAdmin={isAdmin}
@@ -174,13 +176,16 @@ export default function JoinedRoom({
         roomName={roomName}
         setRoomName={setRoomName}
       />}
-      {showCustomBannedWordsModal && auth?.currentUser?.uid &&
-      <CustomBannedWordsModal 
+      </AnimatePresence>
+      <AnimatePresence>
+        {showCustomBannedWordsModal && auth?.currentUser?.uid &&
+        <CustomBannedWordsModal 
         setShowModal={setShowCustomBannedWordsModal}
         customCensoredWords={customCensoredWords}
         setCustomCensoredWords={setCustomCensoredWords}
-      />
-      }
+        />
+        }
+    </AnimatePresence>
       <div className='bg-mySecondary text-myText py-2 mb-4 font-bold text-2xl rounded-md relative'>
         <p className='text-center min-h-[24px]'>
           {roomName.length === 0 ? '' : roomName}
@@ -224,10 +229,11 @@ export default function JoinedRoom({
         <div className='mt-1 flex rounded-md overflow-hidden'>
         <textarea value={text}
           className='text-area text-myBackground px-2 py-1 outline-none w-[85%]'
+          
           onChange={(e) => setText(e.currentTarget.value)}
           onInput={autoAdjustHeight}
           maxLength={500}                               
-          onKeyDown={handleAutoSubmit}
+          onKeyUp={handleAutoSubmit}
         />
         <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})}
           className='w-[15%] flex items-center justify-center text-2xl bg-myPrimary active:bg-mySecondary transition-all duration-100'

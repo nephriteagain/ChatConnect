@@ -6,6 +6,7 @@ import { doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firest
 import { AiFillCloseSquare, AiFillCheckSquare } from 'react-icons/ai'
 
 import type { userType } from './AdminModal'
+import { motion } from 'framer-motion'
 
 interface CustomBannedWordsModalProps {
   setShowModal: Dispatch<SetStateAction<boolean>>
@@ -103,13 +104,24 @@ export default function CustomBannedWordsModal({
 
   return (
     <div className="fixed top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center z-[500]">
-      <div className="fixed top-0 left-0 h-full w-full bg-myBackground opacity-80 z-[501]"
+      <motion.div className="fixed top-0 left-0 h-full w-full bg-myBackground opacity-80 z-[501]"
         onClick={(e) => {
           e.stopPropagation()
           setShowModal(false)
         }}
+        initial={{opacity: 0}}
+        animate={{opacity: 0.8}}
+        transition={{duration:0.15}}        
+        exit={{opacity: 0}}
       />              
-      <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[300px] min-w-[200px] max-h-[500px] min-h-[400px]  bg-mySecondary rounded-lg">
+      <motion.div 
+        layout
+        className="flex flex-col px-3 py-4 mx-3 z-[502] w-[300px] min-w-[200px] max-h-[500px] min-h-[400px]  bg-mySecondary rounded-lg border-4 border-myAccent"
+        initial={{scale:0.1}}
+        animate={{scale: 1}}
+        transition={{duration:0.15}}        
+        exit={{scale: 0.1}}
+      >
         <p className='mb-6 font-semibold bg-myAccent w-fit px-4 py-1 mx-auto rounded-md text-black'>
           your personal banned words
         </p>       
@@ -174,7 +186,7 @@ export default function CustomBannedWordsModal({
             })
           }
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
