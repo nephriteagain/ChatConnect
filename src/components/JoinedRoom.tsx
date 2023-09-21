@@ -1,4 +1,4 @@
-import { useEffect, useState, Dispatch, SetStateAction} from  'react';
+import { useEffect, useState, Dispatch, SetStateAction, useRef, KeyboardEvent} from  'react';
 
 import { onSnapshot, doc, updateDoc, arrayUnion, } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
@@ -91,7 +91,7 @@ export default function JoinedRoom({
   }
 
   async function sendText(msgObj: message) {
-    if (joinedRoomId === null || text.length === 0) return
+    if (joinedRoomId === null || text.trim().length === 0) return
     const roomRef = doc(db, 'rooms', joinedRoomId)
 
     await updateDoc(roomRef, {
@@ -105,6 +105,13 @@ export default function JoinedRoom({
         throw new Error(err)
       })
   }
+
+  function handleAutoSubmit(e: KeyboardEvent) {
+    if (e.key === 'Enter' && !e.ctrlKey && e.currentTarget === e.target && !e.altKey && !e.shiftKey) {
+      sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})
+    }
+  }
+
 
   useEffect(() => {
     let unSub = () => console.log('')
@@ -153,6 +160,7 @@ export default function JoinedRoom({
     setForceScroll(false)
   }, [forceScroll])
 
+  
 
 
   return (
@@ -219,9 +227,10 @@ export default function JoinedRoom({
           onChange={(e) => setText(e.currentTarget.value)}
           onInput={autoAdjustHeight}
           maxLength={500}                               
+          onKeyDown={handleAutoSubmit}
         />
         <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})}
-          className='w-[15%] flex items-center justify-center text-2xl bg-myAccent active:bg-myPrimary transition-all duration-100'
+          className='w-[15%] flex items-center justify-center text-2xl bg-myPrimary active:bg-mySecondary transition-all duration-100'
         >
           <BsFillSendFill />
         </button>

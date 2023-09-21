@@ -9,9 +9,9 @@ export default {
       colors: {
         myText: '#f6fbfe',
         myBackground: '#051e29',
-        myPrimary: '#f09666',
+        myPrimary: '#4F709C',
         mySecondary: '#072b3b',
-        myAccent: '#a84115'
+        myAccent: '#E5D283'
       }
     },
   },

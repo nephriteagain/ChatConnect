@@ -61,7 +61,7 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
           />
         </div>
         <div className='bg-myAccent px-4 py-2 rounded-md'>
-          <p className='text-lg font-semibold text-center'>
+          <p className='text-lg font-semibold text-center text-black'>
             TYPE
           </p>
           <button ref={publicRef}

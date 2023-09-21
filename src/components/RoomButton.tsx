@@ -30,7 +30,7 @@ export default function RoomButton({
         setJoinedRoomId(roomId)
         setShowRooms(false)
       }}
-        className="bg-mySecondary px-2 py-1 rounded-md hover:scale-105 hover:bg-green-800 transition-all duration-200"
+        className="bg-mySecondary text-myText px-2 py-1 rounded-md hover:scale-105 hover:bg-green-800 transition-all duration-200"
       >
         Enter
       </button>
@@ -40,7 +40,7 @@ export default function RoomButton({
   if (canJoin) {
     return (
       <button onClick={() => requestJoinRoom(roomId)}
-              className="bg-myBackground px-2 py-1 rounded-md hover:scale-105 hover:bg-blue-800 transition-all duration-200"
+              className="bg-myBackground text-myText px-2 py-1 rounded-md hover:scale-105 hover:bg-blue-800 transition-all duration-200"
             >
               Join
             </button>
@@ -50,7 +50,7 @@ export default function RoomButton({
   if (isPending) {
     return (
       <button disabled
-        className="bg-myBackground px-2 py-1 rounded-md disabled:opacity-70"
+        className="bg-myBackground text-myText px-2 py-1 rounded-md disabled:opacity-70"
       >
         Pending
       </button>
@@ -63,7 +63,7 @@ export default function RoomButton({
         setJoinedRoomId(roomId)
         setShowRooms(false)
       }}
-      className="bg-mySecondary px-2 py-1 rounded-md hover:scale-105 hover:bg-green-800 transition-all duration-200"
+      className="bg-mySecondary text-myText px-2 py-1 rounded-md hover:scale-105 hover:bg-green-800 transition-all duration-200"
       >
       Enter
     </button>
@@ -73,7 +73,7 @@ export default function RoomButton({
   if (isBanned) {
     return (
       <button disabled
-        className="bg-myBackground px-2 py-1 rounded-md disabled:opacity-70"
+        className="bg-myBackground text-myText px-2 py-1 rounded-md disabled:opacity-70"
       >
         Banned
       </button>
@@ -81,7 +81,6 @@ export default function RoomButton({
   }
 
   // for typescript error, will never render
-  return (
-    <span></span>
-  )
+  return null
+  
 }

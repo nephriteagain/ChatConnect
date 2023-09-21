@@ -98,7 +98,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
 
         return (
           <div key={room.id}
-            className=" bg-myAccent px-2 py-2 my-2 rounded-md shadow-sm w-[200px] max-w-[200px] flex items-center justify-center hover:translate-x-1 transtion-all duration-200"
+            className=" bg-myAccent text-black px-2 py-2 my-2 rounded-md shadow-sm w-[200px] max-w-[200px] flex items-center justify-center hover:translate-x-1 transtion-all duration-200"
             >
             {room.type === 'private' && 
               <span className="me-1">

@@ -150,8 +150,8 @@ export default function Messages({
       (isAdmin || isMod || isUserPost) ?
       <div onClick={(e) => showDeleteTextPopup(e, index)}
       className={isUserPost ?
-        'max-w-[80%] ms-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip cursor-pointer' : 
-        'max-w-[80%] me-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip cursor-pointer'
+        'max-w-[80%] ms-auto px-2 py-1 bg-transparent border-[3px] border-myAccent rounded-xl  text-myText overflow-x-clip cursor-pointer' : 
+        'max-w-[80%] me-auto px-2 py-1 bg-transparent border-[3px] border-myAccent rounded-xl  text-myText overflow-x-clip cursor-pointer'
       }
       >
       { isUserPost ? 
@@ -173,8 +173,8 @@ export default function Messages({
       </div> :
       <div 
       className={isUserPost ?
-        'max-w-[80%] ms-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip' : 
-        'max-w-[80%] me-auto px-2 py-1 bg-myAccent rounded-md  text-myText overflow-x-clip'
+        'max-w-[80%] ms-auto px-2 py-1 bg-transparent border-[3px] border-myAccent rounded-xl  text-myText overflow-x-clip' : 
+        'max-w-[80%] me-auto px-2 py-1 bg-transparent border-[3px] border-myAccent  rounded-xl  text-myText overflow-x-clip'
       }
       >
       {filteredText}
@@ -186,8 +186,8 @@ export default function Messages({
       { (isAdmin && !isUserMod && !isUserPost) ?
       <small onClick={(e) => showPopup(e, index)}
         className={isUserPost ?
-          'opacity-55 ms-auto cursor-pointer relative':
-          'opacity-55 me-auto cursor-pointer relative'          
+          'opacity-55 ms-auto cursor-pointer relative text-myText':
+          'opacity-55 me-auto cursor-pointer relative text-myText'          
         }
         onMouseEnter={(e) => showBanPopupElement(e, message.id)}                
         onMouseLeave={(e) => hideBanPopupElement(e, message.id, isUserPost)}
@@ -228,8 +228,8 @@ export default function Messages({
           />
       </small> :
       <small className={isUserPost ?      
-        'opacity-55 ms-auto relative':
-        'opacity-55 me-auto relative'
+        'opacity-55 ms-auto relative text-myText':
+        'opacity-55 me-auto relative text-myText'
       }                  
       >
         {filterName}

@@ -110,7 +110,7 @@ export default function CustomBannedWordsModal({
         }}
       />              
       <div className="flex flex-col px-3 py-4 mx-3 z-[502] w-[300px] min-w-[200px] max-h-[500px] min-h-[400px]  bg-mySecondary rounded-lg">
-        <p className='mb-6 font-semibold bg-myAccent w-fit px-4 py-1 mx-auto rounded-md'>
+        <p className='mb-6 font-semibold bg-myAccent w-fit px-4 py-1 mx-auto rounded-md text-black'>
           your personal banned words
         </p>       
         <div className='flex flex-col items-center justify-center'>
@@ -157,7 +157,7 @@ export default function CustomBannedWordsModal({
           { customCensoredWords.length > 0 &&
             customCensoredWords.map((word, index) => {
               return (
-                <div className='flex flex-row px-2 py-1 rounded-md group group-hover:visible border border-[transparent] hover:border-white hover:bg-mySecondary'
+                <div className='flex flex-row px-2 py-1 rounded-md group group-hover:visible border border-[transparent] hover:border-white hover:bg-mySecondary transition-all duration-100'
                   key={index}
                 >
                   <p className='me-auto text-sm'>

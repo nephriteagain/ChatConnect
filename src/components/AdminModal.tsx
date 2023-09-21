@@ -158,7 +158,7 @@ export default function AdminModal({
           </p>
           { isAdmin &&
           <div className='flex flex-col items-center justify-center mt-2'>
-            <button className='text-[0.75rem] font-semibold bg-myAccent rounded-md py-[0.1rem] px-2 my-1 hover:bg-red-200 hover:text-red-800 hover:scale-105 active:scale-100 transition-all duration-100'
+            <button className='text-[0.75rem] font-semibold bg-myAccent text-black rounded-md py-[0.1rem] px-2 my-1 hover:bg-red-200 hover:text-red-800 hover:scale-105 active:scale-100 transition-all duration-100'
               onClick={(e) => showHideChangeNameInput(e)}
             >
               change name
