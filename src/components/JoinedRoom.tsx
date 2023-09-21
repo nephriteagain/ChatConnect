@@ -1,4 +1,4 @@
-import { useEffect, useState, Dispatch, SetStateAction, useRef, KeyboardEvent} from  'react';
+import { useEffect, useState, Dispatch, SetStateAction, KeyboardEvent, ChangeEvent} from  'react';
 
 import { onSnapshot, doc, updateDoc, arrayUnion, } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
@@ -9,7 +9,7 @@ import { BsFillSendFill } from 'react-icons/bs'
 import { MdPeopleAlt } from 'react-icons/md'
 import { FaBan } from 'react-icons/fa'
 
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 
 import RoomNav from './RoomNav';
 import Messages from './Messages';
@@ -109,9 +109,11 @@ export default function JoinedRoom({
 
   function handleAutoSubmit(e: KeyboardEvent) {
     if (e.key === 'Enter' && !e.ctrlKey && e.currentTarget === e.target && !e.altKey && !e.shiftKey) {
+      setText((t) => t.slice(0, t.length-1))
       sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})
     }
   }
+
 
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import { collection, doc, onSnapshot, updateDoc, arrayUnion, getDoc } from "fire
 import { auth, db } from "../db/firebase"
 
 import { RiGitRepositoryPrivateLine } from 'react-icons/ri'
+import { useRoomsSnapshot } from "../hooks/useRoomsSnaphot"
 
 import RoomButton from "./RoomButton"
 
@@ -34,9 +35,10 @@ interface RoomsProps {
 }
 
 export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
-  const [ rooms, setRooms ] = useState<roomType[]>([])  
+  // const [ rooms, setRooms ] = useState<roomType[]>([])  
 
   const roomsRef = collection(db, 'rooms')
+  const rooms = useRoomsSnapshot<roomType>(roomsRef, [])
 
   async function requestJoinRoom(id: string) {
     if (!auth?.currentUser) return
@@ -62,16 +64,7 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
     
   }
   
-  useEffect(() => {
-    const unsub = onSnapshot(roomsRef, (querySnapshot) => {
-      const roomList : roomType[] = []
-      querySnapshot.forEach((doc) => {        
-        roomList.push({...doc.data(), id: doc.id} as roomType)
-      })
-      setRooms(roomList)
-    })   
-    return () => unsub()
-  }, [])
+
 
   return (
     <div>
