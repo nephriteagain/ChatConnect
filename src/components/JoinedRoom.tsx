@@ -1,4 +1,4 @@
-import { useEffect, useState, Dispatch, SetStateAction, KeyboardEvent, ChangeEvent} from  'react';
+import { useEffect, useState, Dispatch, SetStateAction, KeyboardEvent,} from  'react';
 
 import { onSnapshot, doc, updateDoc, arrayUnion, } from 'firebase/firestore';
 import { auth, db,} from '../db/firebase';
