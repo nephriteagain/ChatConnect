@@ -3,9 +3,12 @@ import {useState, useRef, ChangeEvent, MouseEvent, Dispatch, SetStateAction} fro
 
 import { motion } from 'framer-motion'
 
+import Loading from './Loading'
+
 interface CreateModalProps  {
   handleCreate: (roomData: roomData) => void
   handleModal: Dispatch<SetStateAction<boolean>>
+  loading: boolean
 }
 
 type roomData = {
@@ -13,9 +16,8 @@ type roomData = {
   type: string
 }
 
-export default function CreateModal({handleCreate, handleModal} : CreateModalProps) {
+export default function CreateModal({handleCreate, handleModal, loading} : CreateModalProps) {
   const [ roomData, setRoomData ] = useState<roomData>({name: '', type: 'public'})
-
 
   const publicRef = useRef<HTMLButtonElement>(null)
   const privateRef = useRef<HTMLButtonElement>(null)
@@ -34,12 +36,12 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
 
     if (e.currentTarget === publicDiv) {
       setRoomData({...roomData, type: 'public'})
-      publicDiv.style.border = '2px solid #fff'
-      privateDiv.style.border = '2px solid transparent'
+      publicDiv.style.border = '4px solid #fff'
+      privateDiv.style.border = '4px solid transparent'
     } else {
       setRoomData({...roomData, type: 'private'})
-      publicDiv.style.border = '2px solid transparent'
-      privateDiv.style.border = '2px solid #fff'
+      publicDiv.style.border = '4px solid transparent'
+      privateDiv.style.border = '4px solid #fff'
     }
   }
   
@@ -57,7 +59,7 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
         exit={{opacity: 0}}
         />
       <motion.div 
-        className='mb-[10%] z-[101] bg-mySecondary p-8 rounded-md w-[450px] min-w-[300px] flex flex-col items-center justify-center'
+        className='mb-[10%] z-[101] bg-mySecondary p-8 rounded-md w-[450px] min-w-[300px] flex flex-col items-center justify-center border-4 border-myAccent'
         initial={{scale:0.1}}
         animate={{scale: 1}}
         transition={{duration:0.15}}        
@@ -81,13 +83,13 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
           <button ref={publicRef}
             onClick={(e) => setType(e)}
             style={{border: '2px solid #fff'}}
-            className='px-2 py-1 mt-1 bg-myBackground mx-1 rounded-md'
+            className='px-2 py-1 mt-1 bg-myBackground mx-1 rounded-md hover:bg-myPrimary transition-all duration-150'
           >
             Public
           </button>
           <button ref={privateRef}
             onClick={(e) => setType(e)}
-            className='px-2 py-1 mt-1 bg-myBackground mx-1 rounded-md'
+            className='px-2 py-1 mt-1 bg-myBackground mx-1 rounded-md hover:bg-myPrimary transition-all duration-150'
           >
             Private
           </button>
@@ -95,12 +97,16 @@ export default function CreateModal({handleCreate, handleModal} : CreateModalPro
 
         <div className='bg-myPrimary text-mySecondary font-bold flex w-[280px] px-4 py-2 rounded-md my-4'>
           <button onClick={() => handleCreate(roomData)}
-          className='basis-1/2 bg-green-300 rounded-md mx-1 px-2 py-1'
+          className='relative basis-1/2 bg-green-300 rounded-md mx-1 px-2 py-1 shadow-md drop-shado-md hover:bg-green-400 transition-all duration-150 disabled:opacity-60'
+            disabled={loading}
           >
-            Create Room
+            <p className={loading ? 'invisible' : 'visible'}>
+              Create Room
+            </p>
+            {loading && <Loading width={28} height={28} />}
           </button>
           <button onClick={() => handleModal(false)}
-          className='basis-1/2 bg-red-300 rounded-md mx-1 px-2 py-1'
+          className='basis-1/2 bg-red-300 rounded-md mx-1 px-2 py-1 shadow-md drop-shado-md hover:bg-red-400 transition-all duration-150'
           >
             Cancel
           </button>

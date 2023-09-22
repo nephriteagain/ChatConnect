@@ -43,64 +43,55 @@ export default function User({
   async function getUserData() {
     if (!userData) return
     const userRef = doc(db, 'users', userData.uid)
-    await getDoc(userRef)
-      .then((doc) => {
+    try {
+      const doc = await getDoc(userRef)
+      if (doc.exists()) {
+        setUserName(doc.data().userName)
 
-        if (doc.exists()) {
-          setUserName(doc.data().userName)
-
-        }
-      })
-      .catch(err => {
-        throw new Error(err)
-      })    
+      }
+    } catch (error) {
+      console.error(error)
+    }
+   
   }
 
 
   async function signInWithGoogle() {
-    await signInWithPopup(auth, provider)
-      .then((data) => {
-        const userObject = data.user
-        const uid = data.user.uid
-        const userDbRef = doc(db, 'users', uid)
-        getDoc(userDbRef)
-          .then(result => {
-            if (!result.exists()) {
-              setDoc(userDbRef, {
-                name: userObject.displayName,
-                email: userObject.email,
-                userName: userObject.email,
-                id: uid,
-                joinedAt: Date.now(),
-                censoredWords: []
-              })
-                // .then(() => setNewUser(true))
-                .catch(err => {
-                  throw new Error(err)
-                })
-            }
-          })
-          .then(() => setSignedIn(true))
-          .catch(err => {
-            throw new Error(err)
-          })
-      })
-      .catch(err => {
-        throw new Error(err)
-      })            
-    
-}
+    try {
+      const data = await signInWithPopup(auth, provider);
+      const userObject = data.user;
+      const uid = userObject.uid;
+      const userDbRef = doc(db, 'users', uid);
+      const userDoc = await getDoc(userDbRef);
+  
+      if (!userDoc.exists()) {
+        await setDoc(userDbRef, {
+          name: userObject.displayName,
+          email: userObject.email,
+          userName: userObject.email,
+          id: uid,
+          joinedAt: Date.now(),
+          censoredWords: [],
+        });
+      }
+  
+      setSignedIn(true);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  
 
 async function userSignOut() {
-  await signOut(auth)
-    .then(() => {
-      setUserData(null)
-      setUserName('')
-      setJoinedRoomId(null)
-    })
-    .catch(err => {
-      throw new Error(err)
-    })
+  try {
+    await signOut(auth)
+    setUserData(null)
+    setUserName('')
+    setJoinedRoomId(null)
+  } catch (error) {
+    console.error(error)
+  }
+
 }
 
   useEffect(() => {

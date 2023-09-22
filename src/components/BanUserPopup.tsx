@@ -37,13 +37,15 @@ export default function BanUserPopup({
     element.style.transform = position === 'left' ? 'translateX(-300%)' : 'translateX(300%)'
 
     const roomRef = doc(db, 'rooms', joinedRoomId)
-    await updateDoc(roomRef, {
-      banned: arrayUnion(userId)
-    })
-      .then(() => alert(`user ${userId} is banned!`))
-      .catch(err => {
-        throw new Error(err)
+    try {
+      await updateDoc(roomRef, {
+        banned: arrayUnion(userId)
       })
+      alert(`user ${userId} is banned!`)
+    } catch (error) {
+      console.error(error)
+    }
+
   }
 
 

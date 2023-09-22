@@ -23,25 +23,28 @@ export default function Requests({
     if (!joinedRoomId) return
     const roomRef = doc(db, 'rooms', joinedRoomId)
     
-    await updateDoc(roomRef, {
-      members: arrayUnion(request),
-      requests: arrayRemove(request)
-    })
-      .catch(err => {
-        throw new Error(err)
-      })    
+    try {
+      await updateDoc(roomRef, {
+        members: arrayUnion(request),
+        requests: arrayRemove(request)
+      })
+    } catch (error) {
+      console.error(error)
+    } 
   }
 
   async function rejectJoinRequest(request: requestType) {
     if (!joinedRoomId) return
     const roomRef = doc(db, 'rooms', joinedRoomId)
 
-    await updateDoc(roomRef, {
-      requests: arrayRemove(request)
-    })
-      .catch(err => {
-        throw new Error(err)
+    try {
+      await updateDoc(roomRef, {
+        requests: arrayRemove(request)
       })
+    } catch (error) {
+      console.error(error)
+    }
+
   }
 
 

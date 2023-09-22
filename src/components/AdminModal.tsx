@@ -89,17 +89,16 @@ export default function AdminModal({
     if (typeof joinedRoomId !== 'string' || !isAdmin || newName.length === 0) return
 
     const roomRef = doc(db, 'rooms', joinedRoomId)
-    await updateDoc(roomRef, {
-      name: newName
-    })
-      .then(() => {
-        setRoomName(newName)
-        setShowChangeNameInput(false)
-        setNewRoomName('')
+    try {
+      await updateDoc(roomRef, {
+        name: newName
       })
-      .catch(err => {
-        throw new Error(err)
-      })
+      setRoomName(newName)
+      setShowChangeNameInput(false)
+      setNewRoomName('')
+    } catch (error) {
+      console.error(error)
+    }
   }
 
 

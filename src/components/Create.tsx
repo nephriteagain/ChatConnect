@@ -16,7 +16,7 @@ interface newRoom {
 
 export default function Create({userName}: CreateProps) {
   const [ showModal, setShowModal ] = useState<boolean>(false)
-  
+  const [ loading, setLoading ] = useState(false)
 
   async function createNewRoom({name, type}: newRoom) {
     if (auth.currentUser === null) return
@@ -50,20 +50,24 @@ export default function Create({userName}: CreateProps) {
         }],
         requests: []
       }
-    await addDoc(roomsRef, data)
-      .then(() => {
+
+      try {
+        setLoading(true)
+        await addDoc(roomsRef, data)
         setShowModal(false)
-      })
-      .catch(err => {
-        throw new Error(err)
-      })
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+
   }
 
   
   return (
     <div>
       <AnimatePresence>
-        {showModal &&<CreateModal handleCreate={createNewRoom} handleModal={setShowModal}/>}
+        {showModal &&<CreateModal handleCreate={createNewRoom} handleModal={setShowModal} loading={loading} />}
       </AnimatePresence>
       <button onClick={() => setShowModal(true)}
         className="mb-6 text-lg bg-green-700 px-2 py-1 rounded-md font-bold hover:bg-green-500 hover:text-myBackground hover:scale-105 transition-all duration-200"

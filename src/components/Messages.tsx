@@ -68,30 +68,33 @@ export default function Messages({
     if (typeof roomId !== 'string') return
     const roomRef = doc(db, 'rooms', roomId)
 
-    await updateDoc(roomRef, {
-      mods: arrayUnion(userId)
-    })
-      .then(() => {
-        alert(`user "${userId}" successfully modded`)  
+    try {
+      await updateDoc(roomRef, {
+        mods: arrayUnion(userId)
       })
-      .catch(err => {
-        throw new Error(err)
-      })
+      alert(`user "${userId}" successfully modded`)  
+
+    } catch (error) {
+      console.error(error)
+    }
+
   }
 
   async function deleteMessage(e: MouseEvent<HTMLButtonElement> , message: message, roomId: string, cb: callback) {
     if (typeof roomId !== 'string') return
 
     const roomRef = doc(db, 'rooms', roomId)
-    await updateDoc(roomRef, {
-      messages: arrayRemove(message)
-    })
-      .then(() => {
-        cb(e)        
+
+    try {
+      await updateDoc(roomRef, {
+        messages: arrayRemove(message)
       })
-      .catch(err => {
-        throw new Error(err)
-      })
+      cb(e)       
+
+    } catch (error) {
+      console.error(error)
+    }
+
   }
 
   function showPopup(e: MouseEvent<HTMLElement>, index: number) {

@@ -1,6 +1,6 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react"
+import {  Dispatch, SetStateAction } from "react"
 
-import { collection, doc, onSnapshot, updateDoc, arrayUnion, getDoc } from "firebase/firestore"
+import { collection, doc,  updateDoc, arrayUnion, getDoc } from "firebase/firestore"
 import { auth, db } from "../db/firebase"
 
 import { RiGitRepositoryPrivateLine } from 'react-icons/ri'
@@ -48,17 +48,18 @@ export default function Rooms({setJoinedRoomId, setShowRooms}: RoomsProps) {
 
     if (data) {
       const roomRef = doc(db, 'rooms', id)
-    await updateDoc(roomRef, {
-      requests: arrayUnion({
-        id: auth.currentUser.uid,
-        email: data.email,
-        userName: data.userName
-      })
-    })
-      .then(() => alert('request sent'))
-      .catch(err => {
-        throw new Error(err)
-      })
+      try {
+        await updateDoc(roomRef, {
+          requests: arrayUnion({
+            id: auth.currentUser.uid,
+            email: data.email,
+            userName: data.userName
+          })
+        })
+        alert('request sent')
+      } catch (error) {
+        console.error(error)
+      }
     }
 
     
