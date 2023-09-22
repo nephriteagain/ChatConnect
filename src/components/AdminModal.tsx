@@ -162,17 +162,22 @@ export default function AdminModal({
         exit={{scale: 0.1}}
         className="flex flex-col px-3 py-4 mx-3 z-[502] w-[400px] min-w-[280px] max-h-[400px] min-h-[400px] bg-mySecondary rounded-md border-4 border-myAccent"
       >
-        <div className='mx-auto mb-4 px-4 py-1 bg-myBackground rounded-md flex flex-col items-center justify-center min-w-[220px]'>
-          <p className='text-3xl font-bold '>
+        <motion.div className='mx-auto mb-4 px-4 py-1 bg-myBackground rounded-md flex flex-col items-center justify-center min-w-[220px]'
+          layout
+        >
+          <motion.p className='text-3xl font-bold ' layout>
             {roomName}
-          </p>
+          </motion.p>
           { isAdmin &&
-          <div className='flex flex-col items-center justify-center mt-2'>
-            <button className='text-[0.75rem] font-semibold bg-myAccent text-black rounded-md py-[0.1rem] px-2 my-1 hover:bg-red-200 hover:text-red-800 hover:scale-105 active:scale-100 transition-all duration-100'
+          <motion.div className='flex flex-col items-center justify-center mt-2'
+            layout
+          >
+            <motion.button className='text-[0.75rem] font-semibold bg-myAccent text-black rounded-md py-[0.1rem] px-2 my-1 hover:bg-red-200 hover:text-red-800 hover:scale-105 active:scale-100 transition-all duration-100'
+              layout
               onClick={(e) => showHideChangeNameInput(e)}
             >
               change name
-            </button>
+            </motion.button>
             { showChangeNameInput &&
             <>
             <div className='my-1'>
@@ -196,11 +201,13 @@ export default function AdminModal({
             </div>   
             </>    
             }
-          </div>
+          </motion.div>
           }
           
-        </div>
-        <div className='flex flex-col items-center justify-center bg-myBackground px-2 py-2 rounded-md mb-8'>
+        </motion.div>
+        <motion.div className='flex flex-col items-center justify-center bg-myBackground px-2 py-2 rounded-md mb-8'
+          layout
+        >
           <p className='font-bold text-2xl'>ADMIN</p>
           <div className='font-semibold text-xl'>
             {adminData?.userName}
@@ -208,8 +215,10 @@ export default function AdminModal({
           <div className='font-semibold text-sm'>
             {adminData?.id}
           </div>
-        </div>
-        <div className='flex flex-col items-center justify-center bg-myBackground rounded-md mb-6 px-2 py-2'>
+        </motion.div>
+        <motion.div className='flex flex-col items-center justify-center bg-myBackground rounded-md mb-6 px-2 py-2'
+          layout
+        >
           <p className='font-bold text-xl'>
             MODS
           </p>
@@ -256,7 +265,7 @@ export default function AdminModal({
               There is currently no mods at this room.
             </div>
           }
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   )

@@ -16,7 +16,7 @@ import Messages from './Messages';
 import Requests from './Requests';
 import AdminModal from './AdminModal';
 import CustomBannedWordsModal from './CustomBannedWordsModal';
-
+import Loading from './Loading';
 
 // TODO
 export type message = {
@@ -73,7 +73,7 @@ export default function JoinedRoom({
   const [ showAdminModal, setShowAdminModal ] = useState<boolean>(false)
   const [ showCustomBannedWordsModal, setShowCustomBannedWordsModal ] = useState<boolean>(false)
   const [ customCensoredWords, setCustomCensoredWords ] = useState<string[]>([])
-
+  const [ loading, setLoading ] = useState<boolean>(false)
 
 
   const userId = user?.uid || null
@@ -95,16 +95,18 @@ export default function JoinedRoom({
     if (joinedRoomId === null || text.trim().length === 0) return
     const roomRef = doc(db, 'rooms', joinedRoomId)
 
-    await updateDoc(roomRef, {
-      messages: arrayUnion(msgObj)
-    })
-      .then(() => {
+    try {
+      setLoading(true)
+      await updateDoc(roomRef, {
+        messages: arrayUnion(msgObj)
+      })
+      setText('')
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
 
-        setText('')
-      })
-      .catch(err => {
-        throw new Error(err)
-      })
   }
 
   function handleAutoSubmit(e: KeyboardEvent) {
@@ -238,9 +240,13 @@ export default function JoinedRoom({
           onKeyUp={handleAutoSubmit}
         />
         <button onClick={() => sendText({id: generateRandomString(), userId, text, postedAt: Date.now(), userName})}
-          className='w-[15%] flex items-center justify-center text-2xl bg-myPrimary active:bg-mySecondary transition-all duration-100'
+          className='relative w-[15%] flex items-center justify-center text-2xl bg-myPrimary active:bg-mySecondary transition-all duration-100 disabled:opacity-60'
+          disabled={loading}
         >
+          {loading ? 
+          <Loading width={40} height={40} /> :
           <BsFillSendFill />
+          }
         </button>
       </div>
       }

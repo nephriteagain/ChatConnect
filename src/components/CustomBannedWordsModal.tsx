@@ -8,6 +8,8 @@ import { AiFillCloseSquare, AiFillCheckSquare } from 'react-icons/ai'
 import type { userType } from './AdminModal'
 import { motion } from 'framer-motion'
 
+import Loading from './Loading'
+
 interface CustomBannedWordsModalProps {
   setShowModal: Dispatch<SetStateAction<boolean>>
   customCensoredWords: string[]
@@ -25,6 +27,8 @@ export default function CustomBannedWordsModal({
   const [ word, setWord ] = useState<string>('')
   const [ showInput, setShowInput ] = useState<boolean>(false)
   const [ refetch, setRefetch ] = useState<boolean>(true)
+  const [ loading, setLoading ] = useState<boolean>(false)
+  const [ loading2, setLoading2 ] = useState<boolean>(false)
 
   function changeWord(e: ChangeEvent<HTMLInputElement>) {
     const value = e.currentTarget.value
@@ -40,18 +44,19 @@ export default function CustomBannedWordsModal({
     const userId = auth?.currentUser?.uid as string
     const userRef = doc(db, 'users', userId)
 
-
-
-    await updateDoc(userRef, {
-      censoredWords: arrayUnion(word)
-    })
-      .then(() => {
-        setWord('')
-        setRefetch(true)
+    try {
+      setLoading(true)
+      await updateDoc(userRef, {
+        censoredWords: arrayUnion(word)
       })
-      .catch(err => {
-        throw new Error(err)
-      })
+      setWord('')
+      setRefetch(true)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading(false)
+    }
+
   }
   
   async function removeCensoredWord(e: MouseEvent<HTMLButtonElement>, word: string) {
@@ -61,15 +66,19 @@ export default function CustomBannedWordsModal({
     const userId = auth?.currentUser?.uid as string
     const userRef = doc(db, 'users', userId)
 
-    await updateDoc(userRef, {
-      censoredWords: arrayRemove(word)
-    })
-      .then(() => {
-        setRefetch(true)
+    try {
+      setLoading2(true)
+      await updateDoc(userRef, {
+        censoredWords: arrayRemove(word)
       })
-      .catch(err => {
-        throw new Error(err)
-      })
+      setRefetch(true)
+
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setLoading2(false)
+    }
+
 
   }
 
@@ -136,16 +145,27 @@ export default function CustomBannedWordsModal({
           </button>
           { showInput &&
           <>
-          <input type='text' maxLength={20}
+          <motion.input type='text' maxLength={20}
+            initial={{scaleX: 0.01}}
+            animate={{scaleX:1}}
+            transition={{duration:0.2}}
+
             className='outline-none w-[90%] rounded-md text-myBackground px-3 py-1 text-center text-sm'
             value={word}
             onChange={(e) => changeWord(e )}
           />
           <div className='text-3xl flex flex-row items-center justify-center mt-2'>
-            <button className='mx-1'
+            <button className='mx-1 relative flex items-center justify-center disabled:opacity-60'
               onClick={(e) => addCensoredWord(e)}
+              disabled={loading}
             >
-              <AiFillCheckSquare className="fill-green-400 hover:scale-110 active:scale-100 transition-all duration-100" />
+              {
+                loading ? 
+                <div className='relative flex items-center justify-center bg-green-400 w-[1.5rem] aspect-square'>
+                  <Loading width={24} height={24} />
+                </div> :
+                <AiFillCheckSquare className=" fill-green-400 hover:scale-110 active:scale-100 transition-all duration-100" />
+              }
             </button>
             <button className='mx-1'
               onClick={(e) => {
@@ -175,11 +195,17 @@ export default function CustomBannedWordsModal({
                   <p className='me-auto text-sm'>
                     {word}
                   </p>
-                  <button className='hidden group-hover:block text-xl hover:scale-110 active-100 transition-all duration-200'
+                  <button className='relative hidden group-hover:block text-xl hover:scale-110 active-100 transition-all duration-200'
                     onClick={(e) => removeCensoredWord(e,word)}
+                    disabled={loading2}
                   >
-                    <AiFillCloseSquare className="fill-red-400"
-                    />
+                    {
+                    loading2? 
+                    <div className='relative flex items-center justify-center bg-red-400 w-[1rem] aspect-square'>
+                      <Loading width={16}  height={16} />
+                    </div> :
+                    <AiFillCloseSquare className="fill-red-400" />
+                    }
                   </button>
                 </div>
               )

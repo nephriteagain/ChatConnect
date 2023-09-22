@@ -1,10 +1,12 @@
-import { Dispatch, SetStateAction, useState, ChangeEvent } from 'react'
+import { Dispatch, SetStateAction, useState, ChangeEvent, KeyboardEvent,} from 'react'
 
 import { db } from '../db/firebase'
 import {doc, updateDoc} from 'firebase/firestore'
 import { motion } from 'framer-motion'
 
 import type { userDataType } from '../App'
+
+import Loading from './Loading'
 
 interface UserModalTypes {
   userName: string
@@ -21,28 +23,37 @@ export default function UserModal({
   userData
 }: UserModalTypes) {
   const [ newName, setNewName ] = useState<string>(userName)
+  const [ loading, setLoading ] = useState<boolean>(false)
   
   async function changeUserName() {
     if (!userData?.uid) return
     const userRef = doc(db, 'users', userData.uid)
-
-    await updateDoc(userRef, {
-      userName: newName
-    })
-      .then(() => {
-        setShowModal(false)
-        setUserName(newName)
+    try {
+      setLoading(true)
+      await updateDoc(userRef, {
+        userName: newName
       })
-      .catch(err => {        
-        throw new Error(err)
-      })
+      setShowModal(false)
+      setUserName(newName)
+    } catch (error) {
+        console.error(error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     e.stopPropagation()
     const value = e.currentTarget.value
+
     const newValue = value.replace(/\s/g, '') // whitespace not allowed
     setNewName(newValue)
+  }
+
+  async function handleSubmit(e: KeyboardEvent) {
+    if (e.key === 'Enter' && e.target === e.currentTarget) {
+      await changeUserName()
+    }
   }
 
   return (
@@ -69,12 +80,17 @@ export default function UserModal({
           name='name'          
           value={newName}
           onChange={(e) => handleChange(e)}
+          onKeyUp={handleSubmit}
         />
-        <div className='my-2'>
+        <div className='my-2 flex flex-row'>
           <button onClick={() => changeUserName()}
-            className='bg-green-700 px-2 py-1 rounded-sm mx-2 shadow-md drop-shadow-md hover:bg-green-800 transition-all duration-200'
+            className='relative flex items-center justify-center bg-green-700 px-2 py-1 rounded-sm mx-2 shadow-md drop-shadow-md hover:bg-green-800 transition-all duration-200'
+            disabled={loading}
           >
-            Submit
+            <p className={loading? 'invisible' : 'visible'}>
+              Submit
+            </p>
+            { loading && <Loading width={24} height={24} />}
           </button>
           <button onClick={() => setShowModal(false)}
             className='bg-red-700 px-2 py-1 rounded-sm mx-2 shadow-md drop-shadow-md hover:bg-red-800 transition-all duration-200'
